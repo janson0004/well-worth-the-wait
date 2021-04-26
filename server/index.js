@@ -3,6 +3,7 @@ const cookieParser = require("cookie-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const path = require("path");
+const userRoutes = require("./routes/user");
 
 require("dotenv").config();
 // connect to mongoDB
@@ -24,6 +25,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors({ credentials: true, origin: process.env.ORIGIN }));
 app.use(cookieParser());
+
+app.use("/user", userRoutes);
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../client/build")));

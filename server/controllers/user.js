@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
-// API for signing up, requires email, username, email, password in body
+// API for signing up, requires username and password in body
 exports.user_signup = (req, res, next) => {
   User.findOne({ username: req.body.username }).then((exist) => {
     if (exist != null) {
@@ -43,7 +43,7 @@ exports.user_signup = (req, res, next) => {
   });
 };
 
-// API for user login, requires email and password in body
+// API for user login, requires username and password in body
 exports.user_login = (req, res, next) => {
   User.findOne({ username: req.body.username })
     .then((user) => {
@@ -102,3 +102,5 @@ exports.user_info = (req, res, next) => {
       res.status(500).end(err);
     });
 };
+
+// API for 

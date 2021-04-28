@@ -9,11 +9,12 @@ const commentSchema = Schema({
 });
 const restaurantSchema = Schema({
   _id: mongoose.Schema.Types.ObjectId,
-  rating: { type: Number, required: true },
+  placeId: {type: String, requried: true},
   name: { type: String, required: true, unique: true },
+  rating: { type: Number, required: true },
   latitude: { type: Number, required: true },
   longitude: { type: Number, required: true },
   comment: [commentSchema],
 });
 
-module.exports = mongoose.model("User", restaurantSchema);
+module.exports = mongoose.model("Restaurant", restaurantSchema);

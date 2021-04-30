@@ -5,6 +5,7 @@ const cors = require("cors");
 const path = require("path");
 const userRoutes = require("./routes/user");
 const restaurantRoutes = require("./routes/restaurant");
+const methodOverride = require('method-override');
 
 require("dotenv").config();
 // connect to mongoDB
@@ -26,6 +27,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cors({ credentials: true, origin: process.env.ORIGIN }));
 app.use(cookieParser());
+app.use(methodOverride('_method'));
 
 app.use("/user", userRoutes);
 app.use("/restaurant", restaurantRoutes);

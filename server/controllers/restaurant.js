@@ -1,6 +1,42 @@
 const mongoose = require("mongoose");
 const Restaurant = require("../models/restaurant");
 
+//API for creating new restaurant
+exports.restaurant_create = (req, res, next) => {
+    Restaurant.findOne({ placeId: req.body.placeId}).then((exist) => {
+        if (exist != null) {
+          return res.status(409).json({
+            message: "Duplicate placeId",
+          });
+        } 
+        else {
+            const restaurant = new Restaurant({
+                _id: new mongoose.Types.ObjectId(),
+                placeId: req.body.placeId,
+                name: req.body.name,
+                rating: req.body.rating,
+                latitude: req.body.latitude,
+                longitude: req.body.longitude,
+            });
+
+            restaurant
+                .save()
+                .then((result) => {
+                    res.status(201).json({
+                        message: "Restaurant created",
+                    });
+                })
+                .catch((err) => {
+                    res.status(500).json({
+                        error: err,
+                        message: "Database error",
+                    });
+                });
+        }
+    })
+    
+}
+
 //API for getting all restaurants
 exports.restaurant_all = (req, res, next) => {
     Restaurant.find({}).exec((err, e) =>{
@@ -10,20 +46,7 @@ exports.restaurant_all = (req, res, next) => {
         }
         
         if(e){
-            var restaurants = "";
-
-            //put each event detail into string
-            for(i = 0; i < e.length; i++){
-                restaurants += "PlaceId: " + e[i].placeId + "<br>\n" +
-                "name: " + e[i].name + "<br>\n" +
-                "rating: " + e[i].rating + "<br>\n" +
-                "Latitude: " + e[i].latitude + "<br>\n" +
-                "Longitude: " + e[i].longitude + "<br>\n" +
-                "Comment: "  + e[i].comment + "<br>\n" + 
-                "<br>\n"
-            }
-            
-            res.send(restaurants)
+            res.status(200).json(e);
         }
     })
     
@@ -38,17 +61,44 @@ exports.restaurant_one = (req, res, next) => {
 		}
 		
 		if(e){
-            res.send(
-                "PlaceId: " + e.placeId + "</br>\n" +
-                "Name: " + e.name + "<br>\n" +
-                "Rating: " + e.rating + "<br>\n" +
-                "Latitude: " + e.latitude + "<br>\n" + 
-                "Longitude: " + e.longitude + "<br>\n"
-            );
+            res.status(200).json(e);
 		}
 
 		else{
 			res.send("The given PlaceId is not found.")
 		}
     })
+}
+
+//API for updating restaurant
+exports.restaurant_update = (req, res, next) => {
+    Restaurant.findOneAndUpdate({placeId: req.params['placeId']}, { $set: {name: req.body['name'], rating: req.body['rating']} })
+        .exec()
+        .then((result) => {
+            res.status(201).json({
+                message: "Restaurant updated",
+            });
+        })
+        .catch((err) => {
+            res.status(500).json({
+                error: err,
+                message: "Database error",
+            });
+        });
+}
+
+//API for deleting restaurant
+exports.restaurant_delete = (req, res, next) => {
+    Restaurant.findOneAndRemove({placeId: req.params['placeId']}).exec()
+        .then((result) => {
+            res.status(201).json({
+                message: "Restaurant deleted",
+            });
+        })
+        .catch((err) => {
+            res.status(500).json({
+                error: err,
+                message: "Database error",
+            });
+        });
 }

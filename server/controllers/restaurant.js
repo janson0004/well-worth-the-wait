@@ -1,5 +1,60 @@
 const mongoose = require("mongoose");
 const Restaurant = require("../models/restaurant");
+const { spawn } = require("child_process");
+
+//for testing if populartime_api is working *delete this when finished
+exports.restaurant_test = (req, res, next) => {
+    let dataset = [];
+    const python = spawn("python3", ["populartimes_api.py", req.params['placeId']]);
+
+    python.stdout.on("data", (data) => {
+        dataset.push(data);
+    })
+
+    python.on("close", (code) => {
+        res.json(JSON.parse(dataset.join("")))
+    })   
+}
+
+//API for getting restaurant waiting time (all wait-time on that day and wait-time on that hour over the week)
+exports.restaurant_time = (req, res, next) => {
+    let dataset = [];
+    const python = spawn("python3", ["populartimes_api.py", req.params['placeId']]);
+
+    python.stdout.on("data", (data) => {
+        dataset.push(data);
+    })
+
+    python.on("close", (code) => {
+        dataset = JSON.parse(dataset.join(""))
+        
+        let date = new Date()
+        let d = date.getDay() || 7 - 1
+        let h = date.getHours()
+        let day_wait = []
+        let seven_day_wait = []
+
+        dataset = dataset.time_wait
+
+        for (let day in dataset) {
+            var object = dataset[day];
+            var data = object.data
+
+            for(let hour in data){
+
+                if(day == d){
+                    day_wait.push(data[hour])
+                }
+
+                if(hour == h){
+                    seven_day_wait.push(data[hour])
+                }
+            }          
+        }  
+    
+        res.json({day_wait, seven_day_wait})
+    });
+}
 
 //API for creating new restaurant
 exports.restaurant_create = (req, res, next) => {
@@ -10,31 +65,42 @@ exports.restaurant_create = (req, res, next) => {
           });
         } 
         else {
-            const restaurant = new Restaurant({
-                _id: new mongoose.Types.ObjectId(),
-                placeId: req.body.placeId,
-                name: req.body.name,
-                rating: req.body.rating,
-                latitude: req.body.latitude,
-                longitude: req.body.longitude,
+            let dataset = [];
+            const python = spawn("python3", ["populartimes_api.py", req.body['placeId']]);
+        
+            python.stdout.on("data", (data) => {
+                dataset.push(data);
             });
+        
+            python.on("close", (code) => {
+                dataset = JSON.parse(dataset.join(""))
 
-            restaurant
-                .save()
-                .then((result) => {
-                    res.status(201).json({
-                        message: "Restaurant created",
-                    });
-                })
-                .catch((err) => {
-                    res.status(500).json({
-                        error: err,
-                        message: "Database error",
-                    });
+                const restaurant = new Restaurant({
+                    _id: new mongoose.Types.ObjectId(),
+                    placeId: dataset.id,
+                    name: dataset.name,
+                    rating: dataset.rating,
+                    latitude: dataset.coordinates.lat,
+                    longitude: dataset.coordinates.lng,
                 });
+    
+                restaurant
+                    .save()
+                    .then((result) => {
+                        res.status(201).json({
+                            message: "Restaurant created",
+                        });
+                    })
+                    .catch((err) => {
+                        res.status(500).json({
+                            error: err,
+                            message: "Database error",
+                        });
+                    });
+            });
+            
         }
     })
-    
 }
 
 //API for getting all restaurants

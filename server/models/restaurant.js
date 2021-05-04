@@ -7,6 +7,7 @@ const commentSchema = Schema({
   created_time: { type: Date, required: true },
   message: { type: String, required: true },
 });
+
 const restaurantSchema = Schema({
   _id: mongoose.Schema.Types.ObjectId,
   placeId: {type: String, requried: true},
@@ -17,4 +18,7 @@ const restaurantSchema = Schema({
   comment: [commentSchema],
 });
 
-module.exports = mongoose.model("Restaurant", restaurantSchema);
+module.exports = {
+  Restaurant: mongoose.model("Restaurant", restaurantSchema),
+  Comment: mongoose.model("Comment", commentSchema)
+};

@@ -1,5 +1,7 @@
 const mongoose = require("mongoose");
-const Restaurant = require("../models/restaurant");
+const User = require("../models/user");
+const {Restaurant} = require("../models/restaurant");
+const {Comment} = require("../models/restaurant");
 const { spawn } = require("child_process");
 
 //for testing if populartime_api is working *delete this when finished
@@ -103,9 +105,46 @@ exports.restaurant_create = (req, res, next) => {
     })
 }
 
+//API for creating restaurant comment
+exports.restaurant_comment = (req, res, next) => {
+    User.findById(req.userData.userId)
+        .then((user) => {
+            const comment = new Comment({
+                _id: new mongoose.Types.ObjectId(),
+                username: user.username,
+                created_time: new Date(),
+                message: req.body['message'],
+            })
+
+            comment
+                .save()
+                .then((result) => {
+                    Restaurant.findOneAndUpdate({placeId: req.body['placeId']}, { $push: {comment: result} })
+                    .then((e) => {
+                        res.status(201).json({
+                            message: "Comment saved",
+                        });
+                    })
+                    .catch((err) => {
+                        res.status(500).json({
+                            error: err,
+                            message: "Database error",
+                        });
+                    });
+                            
+                })
+
+        .catch((err) => {
+        res.status(500).end(err);
+        });
+    })   
+
+   
+}
+
 //API for getting all restaurants
 exports.restaurant_all = (req, res, next) => {
-    Restaurant.find({}).exec((err, e) =>{
+    Restaurant.find({}).exec((err, e) => {
         if(err){
             res.send(err)
             return
@@ -122,8 +161,10 @@ exports.restaurant_all = (req, res, next) => {
 exports.restaurant_one = (req, res, next) => {
     Restaurant.findOne({placeId: req.params['placeId']}, (err, e) => {
         if(err){
-			res.send(err)
-			return
+			res.status(500).json({
+                error: err,
+                message: "Database error",
+            });
 		}
 		
 		if(e){
@@ -131,7 +172,9 @@ exports.restaurant_one = (req, res, next) => {
 		}
 
 		else{
-			res.send("The given PlaceId is not found.")
+			return res.status(401).json({
+                message: "Restaurant does not exist",
+              });
 		}
     })
 }
@@ -139,7 +182,6 @@ exports.restaurant_one = (req, res, next) => {
 //API for updating restaurant
 exports.restaurant_update = (req, res, next) => {
     Restaurant.findOneAndUpdate({placeId: req.params['placeId']}, { $set: {name: req.body['name'], rating: req.body['rating']} })
-        .exec()
         .then((result) => {
             res.status(201).json({
                 message: "Restaurant updated",
@@ -153,9 +195,10 @@ exports.restaurant_update = (req, res, next) => {
         });
 }
 
+
 //API for deleting restaurant
 exports.restaurant_delete = (req, res, next) => {
-    Restaurant.findOneAndRemove({placeId: req.params['placeId']}).exec()
+    Restaurant.findOneAndRemove({placeId: req.params['placeId']})
         .then((result) => {
             res.status(201).json({
                 message: "Restaurant deleted",

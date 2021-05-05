@@ -31,28 +31,41 @@ exports.restaurant_time = (req, res, next) => {
         let date = new Date()
         let d = date.getDay() || 7 - 1
         let h = date.getHours()
-        let day_wait = []
+        let time_wait = []
+        let ten_hour_wait = []
         let seven_day_wait = []
+        let index = 24 * (d-1) + h
 
         dataset = dataset.time_wait
 
         for (let day in dataset) {
-            var object = dataset[day];
-            var data = object.data
+            let object = dataset[day]
+            let data = object.data
 
             for(let hour in data){
-
-                if(day == d){
-                    day_wait.push(data[hour])
-                }
-
-                if(hour == h){
-                    seven_day_wait.push(data[hour])
-                }
+                time_wait.push(data[hour])
             }          
         }  
-    
-        res.json({day_wait, seven_day_wait})
+
+        if(d == 0 && h < 9){
+            for(let i = 159 + h; i <= 167; i++){
+                ten_hour_wait.push(time_wait[i])
+            }
+            for(let j = 0; j <= h; j++){
+                ten_hour_wait.push(time_wait[j])
+            }
+        }
+        else{
+            for(let i = index - 9; i <= index; i++){
+                ten_hour_wait.push(time_wait[i])
+            }
+        }
+
+        for(let i = h; i <= 144 + h; i += 24){
+            seven_day_wait.push(time_wait[i])
+        }
+
+        res.json({ten_hour_wait, seven_day_wait})
     });
 }
 

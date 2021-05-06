@@ -9,7 +9,7 @@ import { AuthContext } from "../contexts/AuthContext";
 import { useHistory, Link } from "react-router-dom";
 import axios from "axios";
 
-const Login = (setLoading) => {
+const Login = ({ setShowSidebar }) => {
   const [usernames, setUsernames] = useState({
     username: "",
   });
@@ -30,6 +30,7 @@ const Login = (setLoading) => {
       .then((response) => {
         // If user successfully logged in, setAuth to save the user information and redirect to the home page
         setAuth(response.data);
+        setShowSidebar(true);
         history.push("/");
       })
       .catch((error) => {

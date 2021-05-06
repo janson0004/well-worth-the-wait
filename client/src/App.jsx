@@ -18,7 +18,6 @@ function App() {
     AuthContext
   );
   const [showSidebar, setShowSidebar] = useState(false);
-
   useEffect(() => {
     //axios.get used GET request to fetch user data from MongoDB
     axios
@@ -45,6 +44,7 @@ function App() {
               <Navigation
                 showSidebar={showSidebar}
                 setShowSidebar={setShowSidebar}
+                auth={auth}
               />
               <Wrapper>
                 <Route exact path="/">
@@ -61,10 +61,7 @@ function App() {
             <>
               <Navigation />
               <Route exact path="/">
-                <Login
-                  showSidebar={showSidebar}
-                  setShowSidebar={setShowSidebar}
-                />
+                <Login setShowSidebar={setShowSidebar} />
               </Route>
             </>
           )}

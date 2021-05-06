@@ -4,7 +4,7 @@ export const GlobalStyle = createGlobalStyle`
   html {
     box-sizing: border-box;
     -ms-overflow-style: scrollbar;
-    overflow-y: hidden;
+    
   }
 
   html, body, #root {

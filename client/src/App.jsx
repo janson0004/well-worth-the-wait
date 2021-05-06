@@ -46,14 +46,13 @@ function App() {
                 setShowSidebar={setShowSidebar}
                 auth={auth}
               />
-              <Wrapper>
-                <Route exact path="/">
-                  <Home />
-                </Route>
-                <Route exact path="/favplaces">
-                  <FavPlaces />
-                </Route>
-              </Wrapper>
+
+              <Route exact path="/">
+                <Home />
+              </Route>
+              <Route exact path="/favplaces">
+                <FavPlaces />
+              </Route>
             </>
           )}
           {authLoading && <Loader />}

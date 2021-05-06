@@ -112,7 +112,7 @@ exports.user_info = (req, res, next) => {
 
 // API for updating user
 exports.user_update = (req, res, next) => {
-  User.findById(req.body.user_id)
+  User.findById(req.body.userId)
     .then((user) => {
       if (req.body.username != null) {
         user.username = req.body.username;
@@ -130,7 +130,7 @@ exports.user_update = (req, res, next) => {
 };
 
 exports.user_delete = (req, res, next) => {
-  User.findByIdAndDelete(req.body.user_id)
+  User.findByIdAndDelete(req.body.userId)
     .then(() => {
       res.status(200).end("User deleted");
     })

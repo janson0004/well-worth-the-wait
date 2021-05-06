@@ -3,12 +3,18 @@ const router = express.Router();
 
 const RestaurantController = require("../controllers/restaurant");
 const checkAuth = require("../middleware/auth");
+const checkAdmin = require("../middleware/admin");
 
 //post route for creating new restaurant
-router.post("/", RestaurantController.restaurant_create);
+router.post("/", checkAuth, checkAdmin, RestaurantController.restaurant_create);
 
 //post route for creating restaurant comment
-router.post("/comment", checkAuth, RestaurantController.restaurant_comment);
+router.post(
+  "/comment",
+  checkAuth,
+  checkAdmin,
+  RestaurantController.restaurant_comment
+);
 
 // get route for getting all restaurants
 router.get("/", RestaurantController.restaurant_all);
@@ -20,12 +26,25 @@ router.get("/:placeId", RestaurantController.restaurant_one);
 router.get("/time/:placeId", RestaurantController.restaurant_time);
 
 //put route for updating specified restaurant
-router.put("/:placeId", RestaurantController.restaurant_update);
+router.put(
+  "/:placeId",
+  checkAuth,
+  checkAdmin,
+  RestaurantController.restaurant_update
+);
 
 //delete route for deleting specified restaurant
-router.delete("/:placeId", RestaurantController.restaurant_delete);
+router.delete(
+  "/:placeId",
+  checkAuth,
+  checkAdmin,
+  RestaurantController.restaurant_delete
+);
 
 //testing populartime_api route *will delete after finished
 router.get("/test/:placeId", RestaurantController.restaurant_test);
+
+//add fav place
+router.post("/fav", checkAuth, RestaurantController.add_fav);
 
 module.exports = router;

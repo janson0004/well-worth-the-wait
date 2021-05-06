@@ -9,6 +9,7 @@ import {
 import Container from "@material-ui/core/Container";
 import { FaThumbtack } from "react-icons/fa";
 import Heart from "react-animated-heart";
+import Chart from "../components/Chart";
 
 const mapContainerStyle = {
   width: "100%",
@@ -80,6 +81,7 @@ const Place = () => {
             <Location>22.3061193, 114.260494</Location>
           </LocationWrapper>
         </Info>
+        <Chart />
 
         <Comments>
           <CommentsTitle>Comments</CommentsTitle>
@@ -97,6 +99,7 @@ const CustomContainer = styled(Container)``;
 
 const Info = styled.div`
   padding-top: 80px;
+  margin-bottom: 60px;
 `;
 
 const NameWrapper = styled.div`

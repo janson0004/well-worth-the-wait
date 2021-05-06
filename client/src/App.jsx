@@ -14,19 +14,24 @@ import Loader from "./components/Loader";
 import Navigation from "./components/Navigation";
 
 function App() {
-  const { auth, setAuth, setAuthLoading } = useContext(AuthContext);
-  const [loading, setLoading] = useState(true);
+  const { auth, setAuth, authLoading, setAuthLoading } = useContext(
+    AuthContext
+  );
   const [showSidebar, setShowSidebar] = useState(false);
 
   useEffect(() => {
     //axios.get used GET request to fetch user data from MongoDB
-    axios.get("/user", { withCredentials: true }).then((response) => {
-      setAuth(response.data);
-      setAuthLoading(false);
-      setLoading(false);
-      setShowSidebar(true);
-    });
-  }, [setAuth, loading]);
+    axios
+      .get("/user", { withCredentials: true })
+      .then((response) => {
+        setAuth(response.data);
+        setAuthLoading(false);
+        setShowSidebar(true);
+      })
+      .catch((error) => {
+        setAuthLoading(false);
+      });
+  }, []);
 
   return (
     <>
@@ -35,7 +40,7 @@ function App() {
         <GlobalStyle />
 
         <Switch>
-          {!loading && auth && (
+          {!authLoading && auth && (
             <>
               <Navigation
                 showSidebar={showSidebar}
@@ -51,19 +56,18 @@ function App() {
               </Wrapper>
             </>
           )}
-          {/* {loading && <Loader />} */}
-          {
+          {authLoading && <Loader />}
+          {!auth && (
             <>
               <Navigation />
               <Route exact path="/">
                 <Login
-                  setLoading={setLoading}
                   showSidebar={showSidebar}
                   setShowSidebar={setShowSidebar}
                 />
               </Route>
             </>
-          }
+          )}
         </Switch>
       </ThemeProvider>
     </>

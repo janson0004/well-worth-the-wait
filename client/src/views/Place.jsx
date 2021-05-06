@@ -20,7 +20,7 @@ const mapContainerStyle = {
   height: "500px",
 };
 
-// styles: snazzymaps stlye
+// styles: snazzymaps style
 const options = {
   disableDefaultUI: true,
   zoomControl: true,
@@ -32,8 +32,29 @@ const waitTimeData = {
 };
 
 const waitTimeLabel = {
-  ten_hour_wait: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
-  seven_day_wait: [1, 2, 3, 4, 5, 6, 7],
+  ten_hour_wait: [
+    "11:00",
+    "12:00",
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00",
+    "17:00",
+    "18:00",
+    "19:00",
+    "20:00",
+  ],
+  seven_day_wait: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"],
+};
+
+const restaurant = {
+  placeId: "ChIJc91gg_IDBDQRTSK8--GRgCI",
+  name: "Fishing Heya",
+  address:
+    "Shop B3, Treasure World, Site 11, Whampoa Garden, Hung Hom, Hong Kong",
+  rating: 3.9,
+  latitude: 22.3061193,
+  longitude: 114.260494,
 };
 
 const Place = () => {
@@ -61,7 +82,7 @@ const Place = () => {
     <Wrapper>
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
-        zoom={16}
+        zoom={20}
         center={center}
         options={options}
       >
@@ -75,7 +96,10 @@ const Place = () => {
         <Marker position={center} onClick={infoWindowHandler} />
         {showInfoWindow && (
           <InfoWindow position={center} onCloseClick={infoWindowHandler}>
-            <h1>hi</h1>
+            <>
+              <InfoWindowName>{restaurant.name}</InfoWindowName>
+              <InfoWindowAddress>{restaurant.address}</InfoWindowAddress>
+            </>
           </InfoWindow>
         )}
       </GoogleMap>
@@ -83,15 +107,12 @@ const Place = () => {
         <LeftWrapper>
           <Info>
             <NameWrapper>
-              <Name>Fishing Heya</Name>
+              <Name>{restaurant.name}</Name>
               <Heart isClick={fav} onClick={() => setFav(!fav)} />
             </NameWrapper>
-            <Address>
-              Shop B3, Treasure World, Site 11, Whampoa Garden, Hung Hom, Hong
-              Kong
-            </Address>
+            <Address>{restaurant.address}</Address>
             <RatingWrapper>
-              <Rating>3.9</Rating>
+              <Rating>{restaurant.rating}</Rating>
               <FaStar />
               <FaStar />
               <FaStar />
@@ -100,7 +121,7 @@ const Place = () => {
             </RatingWrapper>
             <LocationWrapper>
               <FaThumbtack />
-              <Location>22.3061193, 114.260494</Location>
+              <Location>{`${restaurant.latitude}, ${restaurant.longitude}`}</Location>
             </LocationWrapper>
           </Info>
           <Chart
@@ -151,12 +172,25 @@ const CustomContainer = styled(Container)`
   }
 `;
 
+const InfoWindowName = styled.h2`
+  font-size: 16px;
+  font-weight: 500;
+`;
+
+const InfoWindowAddress = styled.span`
+  font-size: 16px;
+  font-weight: 400;
+  display: block;
+  margin-bottom: 12px;
+`;
+
 const LeftWrapper = styled.div`
   width: 100%;
 
   @media (min-width: ${MEDIA_BREAK.lg}) {
     flex: 0 0 70%;
     max-width: 70%;
+    padding-right: 30px;
   }
 `;
 
@@ -166,6 +200,7 @@ const RightWrapper = styled.div`
   @media (min-width: ${MEDIA_BREAK.lg}) {
     flex: 0 0 30%;
     max-width: 30%;
+    padding-left: 30px;
   }
 `;
 

@@ -57,6 +57,9 @@ function App() {
               <Route exact path="/">
                 <Home />
               </Route>
+              <Route path="/place">
+                <Place />
+              </Route>
               <Route exact path="/favplaces">
                 <FavPlaces />
               </Route>

@@ -20,6 +20,7 @@ const Login = () => {
                 id="username"
                 name="Username "
                 label="Username"
+                variant="filled"
                 InputProps={{ disableUnderline: true }}
               />
             </BlockDiv>
@@ -29,6 +30,7 @@ const Login = () => {
                 label="Password"
                 type="password"
                 autoComplete="current-password"
+                variant="filled"
                 InputProps={{ disableUnderline: true }}
               />
             </BlockDiv>
@@ -86,16 +88,15 @@ const LoginBar = styled.button`
 `;
 
 const CustomTextField = styled(TextField)`
-  background-color: #eff0f1;
-  width: 246px;
-  color: #787878;
-  border-radius: 12px;
-  margin-top: 8px;
+  .MuiInputBase-root.MuiFilledInput-root.MuiInputBase-formControl {
+    background-color: #eff0f1;
+    color: #787878;
+    border-radius: 14px;
+    width: 246px;
+  }
 `;
 
 const BlockDiv = styled.div`
+  display: block;
   margin-bottom: 8px;
-  background-color: #eff0f1;
-  padding-left: 17px;
-  padding-right: 17px;
 `;

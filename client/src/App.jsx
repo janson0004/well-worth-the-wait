@@ -19,8 +19,6 @@ function App() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {}, [setRestaurants]);
-
   useEffect(() => {
     // Get user data
     UserService.getUser()
@@ -57,10 +55,7 @@ function App() {
               <Route exact path="/">
                 <Home />
               </Route>
-              <Route path="/place">
-                <Place />
-              </Route>
-              <Route exact path="/favplaces">
+              <Route path="/favplaces">
                 <FavPlaces />
               </Route>
               <Route path="/place/:id">

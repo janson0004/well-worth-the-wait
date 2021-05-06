@@ -6,6 +6,7 @@ const userSchema = Schema({
   role: { type: String, enum: ["User", "Admin"] },
   username: { type: String, required: true },
   password: { type: String, required: true },
+  fav_place: [{ type: Schema.Types.ObjectId, ref: "Restaurant" }],
 });
 
 module.exports = mongoose.model("User", userSchema);

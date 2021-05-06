@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 
-const Navigation = () => {
+const Navigation = ({ showSidebar, setShowSidebar }) => {
   return (
     <Wrapper>
       <CustomNavbar expand="lg">
@@ -12,6 +12,7 @@ const Navigation = () => {
           <Navbar.Brand>
             <Brand>Restaurants</Brand>
           </Navbar.Brand>
+          {showSidebar && <>123</>}
         </CustomContainer>
       </CustomNavbar>
     </Wrapper>

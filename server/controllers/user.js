@@ -91,6 +91,13 @@ exports.user_login = (req, res, next) => {
     });
 };
 
+// API for user logout
+exports.user_logout = (req, res, next) => {
+  res.status(202).clearCookie("token").json({
+    message: "Logged out",
+  });
+};
+
 // API for getting specific user info
 exports.user_info = (req, res, next) => {
   User.findById(req.userData.userId)
@@ -103,4 +110,31 @@ exports.user_info = (req, res, next) => {
     });
 };
 
-// API for 
+// API for updating user
+exports.user_update = (req, res, next) => {
+  User.findById(req.body.user_id)
+    .then((user) => {
+      if (req.body.username != null) {
+        user.username = req.body.username;
+      }
+      if (req.body.password != null) {
+        user.password = req.body.password;
+      }
+      user.save().then(() => {
+        res.status(200).end("User updated");
+      });
+    })
+    .catch((err) => {
+      res.status(500).end(err);
+    });
+};
+
+exports.user_delete = (req, res, next) => {
+  User.findByIdAndDelete(req.body.user_id)
+    .then(() => {
+      res.status(200).end("User deleted");
+    })
+    .catch((err) => {
+      res.status(500).end(err);
+    });
+};

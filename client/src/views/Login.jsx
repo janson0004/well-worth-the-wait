@@ -26,6 +26,7 @@ const Login = () => {
             </BlockDiv>
             <BlockDiv>
               <CustomTextField
+                required
                 id="standard-password-input"
                 label="Password"
                 type="password"
@@ -62,10 +63,9 @@ const CenterDiv = styled.div`
 `;
 
 const Title = styled.h1`
-  color: #000000;
+  color: ${({ theme }) => theme.mono.primary};
   font-size: 30px;
   font-weight: 700;
-  font-family: "roboto";
   margin-bottom: 17px;
 `;
 const LoginForm = styled.form`
@@ -75,8 +75,8 @@ const LoginForm = styled.form`
 const LoginBar = styled.button`
   width: 76px;
   height: 37px;
-  background-color: #7d68ff;
-  color: #ffffff;
+  background-color: ${({ theme }) => theme.theme.main};
+  color: ${({ theme }) => theme.mono.contrast};
   border: none;
   border-radius: 12px;
   display: flex;
@@ -89,8 +89,8 @@ const LoginBar = styled.button`
 
 const CustomTextField = styled(TextField)`
   .MuiInputBase-root.MuiFilledInput-root.MuiInputBase-formControl {
-    background-color: #eff0f1;
-    color: #787878;
+    background-color: ${({ theme }) => theme.bg.shaded};
+    color: ${({ theme }) => theme.mono.secondary};
     border-radius: 14px;
     width: 246px;
   }

@@ -33,6 +33,7 @@ export const COLOR = {
       primary: "#000000",
       secondary: "#787878",
       tinted: "#4B4B4B",
+      contrast: "#FFFFFF",
     },
     bg: {
       main: "#F8FAFB",

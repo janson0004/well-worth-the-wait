@@ -14,12 +14,13 @@ function App() {
       <ThemeProvider theme={COLOR.light}>
         <GlobalStyle />
         <ResetStyle />
+
+        <Switch>
+          <Route exact path="/">
+            <Login />
+          </Route>
+        </Switch>
       </ThemeProvider>
-      <Switch>
-        <Route exact path="/">
-          <Login />
-        </Route>
-      </Switch>
     </>
   );
 }

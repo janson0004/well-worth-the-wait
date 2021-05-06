@@ -5,10 +5,10 @@ const RestaurantController = require("../controllers/restaurant");
 const checkAuth = require("../middleware/auth");
 
 //post route for creating new restaurant
-router.post("/", RestaurantController.restaurant_create)
+router.post("/", RestaurantController.restaurant_create);
 
 //post route for creating restaurant comment
-router.post("/comment", checkAuth, RestaurantController.restaurant_comment)
+router.post("/comment", checkAuth, RestaurantController.restaurant_comment);
 
 // get route for getting all restaurants
 router.get("/", RestaurantController.restaurant_all);

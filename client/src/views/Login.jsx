@@ -1,5 +1,4 @@
 import React from "react";
-import Navigation from "../components/Navigation";
 import styled from "styled-components/macro";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -9,7 +8,6 @@ import { TextField } from "@material-ui/core";
 const Login = () => {
   return (
     <Container>
-      <Navigation />
       <Wrapper>
         <CenterDiv>
           <LoginForm method="POST">

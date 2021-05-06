@@ -3,8 +3,7 @@ import { createGlobalStyle } from "styled-components/macro";
 export const GlobalStyle = createGlobalStyle`
   html {
     box-sizing: border-box;
-    -ms-overflow-style: scrollbar;
-    overflow-y: hidden;
+    -ms-overflow-style: scrollbar;    
   }
 
   html, body, #root {
@@ -24,6 +23,10 @@ export const GlobalStyle = createGlobalStyle`
   }
 `;
 
+export const MEDIA_BREAK = {
+  md: "767.98px",
+  lg: "991.98px",
+};
 export const COLOR = {
   // Dark mode
   dark: {},

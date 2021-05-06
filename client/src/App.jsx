@@ -7,6 +7,7 @@ import axios from "axios";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Login from "./views/Login";
+import FavPlaces from "./views/FavPlaces";
 
 function App() {
   return (
@@ -18,6 +19,9 @@ function App() {
         <Switch>
           <Route exact path="/">
             <Login />
+          </Route>
+          <Route path="/favplace">
+            <FavPlaces />
           </Route>
         </Switch>
       </ThemeProvider>

@@ -1,0 +1,102 @@
+import React from "react";
+import Navigation from "../components/Navigation";
+import styled from "styled-components/macro";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Container from "react-bootstrap/Container";
+import { TextField } from "@material-ui/core";
+
+const Login = () => {
+  return (
+    <Container>
+      <Navigation />
+      <Wrapper>
+        <CenterDiv>
+          <LoginForm method="POST">
+            <Title>Login</Title>
+            <BlockDiv>
+              <CustomTextField
+                required
+                id="username"
+                name="Username "
+                label="Username"
+                variant="filled"
+                InputProps={{ disableUnderline: true }}
+              />
+            </BlockDiv>
+            <BlockDiv>
+              <CustomTextField
+                required
+                id="standard-password-input"
+                label="Password"
+                type="password"
+                autoComplete="current-password"
+                variant="filled"
+                InputProps={{ disableUnderline: true }}
+              />
+            </BlockDiv>
+
+            <LoginBar>Login</LoginBar>
+          </LoginForm>
+        </CenterDiv>
+      </Wrapper>
+    </Container>
+  );
+};
+
+export default Login;
+
+const Wrapper = styled(Row)`
+  height: 80vh;
+  width: 100%;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const CenterDiv = styled.div`
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Title = styled.h1`
+  color: ${({ theme }) => theme.mono.primary};
+  font-size: 30px;
+  font-weight: 700;
+  margin-bottom: 17px;
+`;
+const LoginForm = styled.form`
+  display: block;
+`;
+
+const LoginBar = styled.button`
+  width: 76px;
+  height: 37px;
+  background-color: ${({ theme }) => theme.theme.main};
+  color: ${({ theme }) => theme.mono.contrast};
+  border: none;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-family: "Roboto";
+  margin-top: 17px;
+`;
+
+const CustomTextField = styled(TextField)`
+  .MuiInputBase-root.MuiFilledInput-root.MuiInputBase-formControl {
+    background-color: ${({ theme }) => theme.bg.shaded};
+    color: ${({ theme }) => theme.mono.secondary};
+    border-radius: 14px;
+    width: 246px;
+  }
+`;
+
+const BlockDiv = styled.div`
+  display: block;
+  margin-bottom: 8px;
+`;

@@ -78,10 +78,7 @@ const Place = () => {
   const { id } = useParams();
 
   useEffect(() => {
-    if (restaurants)
-      setRestaurant(
-        restaurants.find((restaurant) => restaurant.placeId === id)
-      );
+    setRestaurant(restaurants.find((restaurant) => restaurant.placeId === id));
   }, [restaurants, id]);
 
   const infoWindowHandler = () => {
@@ -92,86 +89,82 @@ const Place = () => {
   if (!isLoaded) return "Loading maps";
   return (
     <Wrapper>
-      {restaurant && (
-        <>
-          <GoogleMap
-            mapContainerStyle={mapContainerStyle}
-            zoom={20}
-            center={center}
-            options={options}
-          >
-            {/* Marker props
+      <GoogleMap
+        mapContainerStyle={mapContainerStyle}
+        zoom={20}
+        center={center}
+        options={options}
+      >
+        {/* Marker props
         icon={{
           url: "/assets/img", 
           scaledSize: new window.google.maps.Size(30, 30), 
           origin: new window.google.maps.Point(0, 0), 
           anchor: new window.google.map.Point(15, 15)
         }} */}
-            <Marker position={center} onClick={infoWindowHandler} />
-            {showInfoWindow && (
-              <InfoWindow position={center} onCloseClick={infoWindowHandler}>
-                <>
-                  <InfoWindowName>{restaurant.name}</InfoWindowName>
-                  <InfoWindowAddress>{restaurant.address}</InfoWindowAddress>
-                </>
-              </InfoWindow>
-            )}
-          </GoogleMap>
+        <Marker position={center} onClick={infoWindowHandler} />
+        {showInfoWindow && (
+          <InfoWindow position={center} onCloseClick={infoWindowHandler}>
+            <>
+              <InfoWindowName>{restaurant.name}</InfoWindowName>
+              <InfoWindowAddress>{restaurant.address}</InfoWindowAddress>
+            </>
+          </InfoWindow>
+        )}
+      </GoogleMap>
 
-          <CustomContainer>
-            <LeftWrapper>
-              <Info>
-                <NameWrapper>
-                  <Name>{restaurant.name}</Name>
-                  <Heart isClick={fav} onClick={() => setFav(!fav)} />
-                </NameWrapper>
-                <Address>{restaurant.address}</Address>
-                <RatingWrapper>
-                  <Rating>{restaurant.rating}</Rating>
-                  <FaStar />
-                  <FaStar />
-                  <FaStar />
-                  <FaStar />
-                  <FaStar />
-                </RatingWrapper>
-                <LocationWrapper>
-                  <FaThumbtack />
-                  <Location>{`${restaurant.latitude}, ${restaurant.longitude}`}</Location>
-                </LocationWrapper>
-              </Info>
-              <Chart
-                title="Waiting Time in the past 10 hours"
-                data={waitTimeData.ten_hour_wait}
-                labels={waitTimeLabel.ten_hour_wait}
-              />
-              <Chart
-                title="Waiting Time in this hour of past 7 days"
-                data={waitTimeData.seven_day_wait}
-                labels={waitTimeLabel.seven_day_wait}
-              />
-            </LeftWrapper>
-            <RightWrapper>
-              <Comments>
-                <CommentsTitle>Comments</CommentsTitle>
-                <TextFieldWrapper>
-                  <CustomTextField
-                    multiline
-                    variant="filled"
-                    label="Enter your comment..."
-                    InputProps={{ disableUnderline: true }}
-                    rows={3}
-                  ></CustomTextField>
-                  <Button>
-                    <IoMdSend />
-                  </Button>
-                </TextFieldWrapper>
+      <CustomContainer>
+        <LeftWrapper>
+          <Info>
+            <NameWrapper>
+              <Name>{restaurant.name}</Name>
+              <Heart isClick={fav} onClick={() => setFav(!fav)} />
+            </NameWrapper>
+            <Address>{restaurant.address}</Address>
+            <RatingWrapper>
+              <Rating>{restaurant.rating}</Rating>
+              <FaStar />
+              <FaStar />
+              <FaStar />
+              <FaStar />
+              <FaStar />
+            </RatingWrapper>
+            <LocationWrapper>
+              <FaThumbtack />
+              <Location>{`${restaurant.latitude}, ${restaurant.longitude}`}</Location>
+            </LocationWrapper>
+          </Info>
+          <Chart
+            title="Waiting Time in the past 10 hours"
+            data={waitTimeData.ten_hour_wait}
+            labels={waitTimeLabel.ten_hour_wait}
+          />
+          <Chart
+            title="Waiting Time in this hour of past 7 days"
+            data={waitTimeData.seven_day_wait}
+            labels={waitTimeLabel.seven_day_wait}
+          />
+        </LeftWrapper>
+        <RightWrapper>
+          <Comments>
+            <CommentsTitle>Comments</CommentsTitle>
+            <TextFieldWrapper>
+              <CustomTextField
+                multiline
+                variant="filled"
+                label="Enter your comment..."
+                InputProps={{ disableUnderline: true }}
+                rows={3}
+              ></CustomTextField>
+              <Button>
+                <IoMdSend />
+              </Button>
+            </TextFieldWrapper>
 
-                <Comment />
-              </Comments>
-            </RightWrapper>
-          </CustomContainer>
-        </>
-      )}
+            <Comment />
+          </Comments>
+        </RightWrapper>
+      </CustomContainer>
     </Wrapper>
   );
 };

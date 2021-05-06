@@ -1,15 +1,26 @@
+import { useContext, useEffect } from "react";
 import { ThemeProvider } from "styled-components/macro";
-import { COLOR, GlobalStyle, ResetStyle } from "./components/GlobalStyle";
-import Place from "./views/Place";
 import { Switch, Route } from "react-router-dom";
-import { AuthContext } from "./contexts/AuthContext";
 import axios from "axios";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Login from "./views/Login";
+import Place from "./views/Place";
 import Navigation from "./components/Navigation";
+import { COLOR, GlobalStyle, ResetStyle } from "./components/GlobalStyle";
+import { AuthContext } from "./contexts/AuthContext";
+import RestaurantsService from "./services/RestaurantsService";
+import { RestaurantsContext } from "./contexts/RestaurantsContext";
 
 function App() {
+  const { restaurants, setRestaurants } = useContext(RestaurantsContext);
+
+  useEffect(() => {
+    RestaurantsService.getAll().then((res) => {
+      setRestaurants(res.data);
+    });
+  }, [setRestaurants]);
+
   return (
     <>
       <ThemeProvider theme={COLOR.light}>
@@ -20,7 +31,7 @@ function App() {
           <Route exact path="/">
             <Login />
           </Route>
-          <Route path="/place">
+          <Route path="/place/:id">
             <Place />
           </Route>
         </Switch>

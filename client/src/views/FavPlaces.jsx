@@ -73,7 +73,9 @@ export default FavPlaces;
 
 const Wrapper = styled.div``;
 
-const CustomContainer = styled(Container)``;
+const CustomContainer = styled(Container)`
+  padding-top: 40px;
+`;
 
 const Places = styled.div`
   display: flex;

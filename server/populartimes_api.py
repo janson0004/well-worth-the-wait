@@ -8,7 +8,6 @@ load_dotenv()
 
 API_KEY = os.getenv('API_KEY')
 
-from populartimes import populartimes
 
-response = json.dumps(populartimes.get_id("API-KEY", sys.argv[1]))
+response = json.dumps(populartimes.get_id(API_KEY, sys.argv[1]))
 print(response)

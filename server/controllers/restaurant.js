@@ -21,47 +21,58 @@ exports.restaurant_test = (req, res, next) => {
   });
 };
 
-//API for getting restaurant waiting time (all wait-time on that day and wait-time on that hour over the week)
+//API for getting restaurant waiting time
 exports.restaurant_time = (req, res, next) => {
-  let dataset = [];
-  const python = spawn("python3", [
-    "populartimes_api.py",
-    req.params["placeId"],
-  ]);
+    let dataset = [];
+    const python = spawn("python3", ["populartimes_api.py", req.params['placeId']]);
 
-  python.stdout.on("data", (data) => {
-    dataset.push(data);
-  });
+    python.stdout.on("data", (data) => {
+        dataset.push(data);
+    })
 
-  python.on("close", (code) => {
-    dataset = JSON.parse(dataset.join(""));
+    python.on("close", (code) => {
+        dataset = JSON.parse(dataset.join(""))
+        
+        let date = new Date()
+        let d = date.getDay() || 7 - 1
+        let h = date.getHours()
+        let time_wait = []
+        let ten_hour_wait = []
+        let seven_day_wait = []
+        let index = 24 * (d-1) + h
 
-    let date = new Date();
-    let d = date.getDay() || 7 - 1;
-    let h = date.getHours();
-    let day_wait = [];
-    let seven_day_wait = [];
+        dataset = dataset.time_wait
 
-    dataset = dataset.time_wait;
+        for (let day in dataset) {
+            let object = dataset[day]
+            let data = object.data
 
-    for (let day in dataset) {
-      var object = dataset[day];
-      var data = object.data;
+            for(let hour in data){
+                time_wait.push(data[hour])
+            }          
+        }  
 
-      for (let hour in data) {
-        if (day == d) {
-          day_wait.push(data[hour]);
+        if(d == 0 && h < 9){
+            for(let i = 159 + h; i <= 167; i++){
+                ten_hour_wait.push(time_wait[i])
+            }
+            for(let j = 0; j <= h; j++){
+                ten_hour_wait.push(time_wait[j])
+            }
+        }
+        else{
+            for(let i = index - 9; i <= index; i++){
+                ten_hour_wait.push(time_wait[i])
+            }
         }
 
-        if (hour == h) {
-          seven_day_wait.push(data[hour]);
+        for(let i = h; i <= 144 + h; i += 24){
+            seven_day_wait.push(time_wait[i])
         }
-      }
-    }
 
-    res.json({ day_wait, seven_day_wait });
-  });
-};
+        res.json({ten_hour_wait, seven_day_wait})
+    });
+}
 
 //API for creating new restaurant
 exports.restaurant_create = (req, res, next) => {

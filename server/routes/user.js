@@ -18,7 +18,7 @@ router.get("/", checkAuth, UserController.user_info);
 router.put("/", checkAuth, checkAdmin, UserController.user_update);
 
 //logout
-router.delete("/logout", checkAuth, UserController.user_logout);
+router.post("/logout", checkAuth, UserController.user_logout);
 
 //delete user
 router.delete("/", checkAuth, checkAdmin, UserController.user_delete);

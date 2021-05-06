@@ -10,6 +10,7 @@ import Container from "@material-ui/core/Container";
 import { FaThumbtack } from "react-icons/fa";
 import Heart from "react-animated-heart";
 import Chart from "../components/Chart";
+import { MEDIA_BREAK } from "../components/GlobalStyle";
 
 const mapContainerStyle = {
   width: "100%",
@@ -66,26 +67,29 @@ const Place = () => {
         )}
       </GoogleMap>
       <CustomContainer>
-        <Info>
-          <NameWrapper>
-            <Name>Fishing Heya</Name>
-            <Heart isClick={fav} onClick={() => setFav(!fav)} />
-          </NameWrapper>
-          <Address>
-            Shop B3, Treasure World, Site 11, Whampoa Garden, Hung Hom, Hong
-            Kong
-          </Address>
-          <Rating>3.9</Rating>
-          <LocationWrapper>
-            <FaThumbtack />
-            <Location>22.3061193, 114.260494</Location>
-          </LocationWrapper>
-        </Info>
-        <Chart />
-
-        <Comments>
-          <CommentsTitle>Comments</CommentsTitle>
-        </Comments>
+        <LeftWrapper>
+          <Info>
+            <NameWrapper>
+              <Name>Fishing Heya</Name>
+              <Heart isClick={fav} onClick={() => setFav(!fav)} />
+            </NameWrapper>
+            <Address>
+              Shop B3, Treasure World, Site 11, Whampoa Garden, Hung Hom, Hong
+              Kong
+            </Address>
+            <Rating>3.9</Rating>
+            <LocationWrapper>
+              <FaThumbtack />
+              <Location>22.3061193, 114.260494</Location>
+            </LocationWrapper>
+          </Info>
+          <Chart />
+        </LeftWrapper>
+        <RightWrapper>
+          <Comments>
+            <CommentsTitle>Comments</CommentsTitle>
+          </Comments>
+        </RightWrapper>
       </CustomContainer>
     </Wrapper>
   );
@@ -95,7 +99,30 @@ export default Place;
 
 const Wrapper = styled.div``;
 
-const CustomContainer = styled(Container)``;
+const CustomContainer = styled(Container)`
+  &.MuiContainer-root {
+    display: flex;
+    flex-wrap: wrap;
+  }
+`;
+
+const LeftWrapper = styled.div`
+  width: 100%;
+
+  @media (min-width: ${MEDIA_BREAK.lg}) {
+    flex: 0 0 70%;
+    max-width: 70%;
+  }
+`;
+
+const RightWrapper = styled.div`
+  width: 100%;
+
+  @media (min-width: ${MEDIA_BREAK.lg}) {
+    flex: 0 0 30%;
+    max-width: 30%;
+  }
+`;
 
 const Info = styled.div`
   padding-top: 80px;
@@ -141,7 +168,9 @@ const Location = styled.span`
   margin-left: 12px;
 `;
 
-const Comments = styled.div``;
+const Comments = styled.div`
+  padding-top: 114px;
+`;
 
 const CommentsTitle = styled.span`
   display: block;

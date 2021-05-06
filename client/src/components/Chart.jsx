@@ -50,10 +50,7 @@ export default Chart;
 
 const Wrapper = styled.div``;
 
-const ChartWrapper = styled.div`
-  height: 100%;
-  width: 100%;
-`;
+const ChartWrapper = styled.div``;
 
 const Title = styled.div`
   font-size: 24px;

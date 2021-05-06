@@ -1,25 +1,67 @@
-import React from "react";
+import React, { useState, useContext } from "react";
+import Navigation from "../components/Navigation";
 import styled from "styled-components/macro";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import { TextField } from "@material-ui/core";
+import { AuthContext } from "../contexts/AuthContext";
+import { useHistory, Link } from "react-router-dom";
+import axios from "axios";
 
-const Login = () => {
+const Login = ({ setShowSidebar }) => {
+  const [usernames, setUsernames] = useState({
+    username: "",
+  });
+  const [passwords, setPasswords] = useState({
+    password: "",
+  });
+  const { setAuth } = useContext(AuthContext);
+  const history = useHistory();
+  const Login = (usernames, passwords) => {
+    axios
+      .post(
+        "/user/login",
+        { password: passwords, username: usernames },
+        {
+          withCredentials: true,
+        }
+      )
+      .then((response) => {
+        // If user successfully logged in, setAuth to save the user information and redirect to the home page
+        setAuth(response.data);
+        setShowSidebar(true);
+        history.push("/");
+      })
+      .catch((error) => {
+        //If the email / password is wrong, pop up an alert
+        alert("Login Failed. Try Again.");
+      });
+  };
+
+  const submitHandler = (e) => {
+    e.preventDefault();
+    console.log(usernames.username);
+    console.log(passwords.password);
+    Login(usernames.username, passwords.password);
+  };
   return (
     <Container>
       <Wrapper>
         <CenterDiv>
-          <LoginForm method="POST">
+          <LoginForm method="POST" onSubmit={submitHandler}>
             <Title>Login</Title>
             <BlockDiv>
               <CustomTextField
                 required
                 id="username"
-                name="Username "
+                name="username "
                 label="Username"
                 variant="filled"
                 InputProps={{ disableUnderline: true }}
+                onChange={(e) =>
+                  setUsernames({ ...usernames, username: e.target.value })
+                }
               />
             </BlockDiv>
             <BlockDiv>
@@ -31,6 +73,9 @@ const Login = () => {
                 autoComplete="current-password"
                 variant="filled"
                 InputProps={{ disableUnderline: true }}
+                onChange={(e) =>
+                  setPasswords({ ...passwords, password: e.target.value })
+                }
               />
             </BlockDiv>
 

@@ -1,8 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
 import { ThemeProvider } from "styled-components/macro";
 import { COLOR, GlobalStyle, ResetStyle } from "./components/GlobalStyle";
+import Place from "./views/Place";
 import { Switch, Route } from "react-router-dom";
-import styled from "styled-components/macro";
 import { AuthContext } from "./contexts/AuthContext";
 import axios from "axios";
 import Row from "react-bootstrap/Row";
@@ -71,14 +71,3 @@ function App() {
 }
 
 export default App;
-
-const Wrapper = styled(Row)`
-  height: 100vh;
-  width: 100%;
-  background-color: white;
-  overflow: auto;
-
-  @media (min-width: 992px) {
-    overflow: hidden;
-  }
-`;

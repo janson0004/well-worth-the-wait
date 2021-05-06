@@ -7,18 +7,20 @@ import axios from "axios";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Login from "./views/Login";
+import Navigation from "./components/Navigation";
 
 function App() {
   return (
     <>
       <ThemeProvider theme={COLOR.light}>
-        <GlobalStyle />
         <ResetStyle />
+        <GlobalStyle />
+        <Navigation />
         <Switch>
           <Route exact path="/">
             <Login />
           </Route>
-          <Route path="place">
+          <Route path="/place">
             <Place />
           </Route>
         </Switch>

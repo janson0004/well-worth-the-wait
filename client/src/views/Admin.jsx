@@ -21,6 +21,7 @@ const Admin = () => {
   const [password, setPassword] = useState("");
   const [placeId, setPlaceId] = useState("");
   const [userInfo, setUserInfo] = useState("");
+
   useEffect(() => {
     axios
       .get("/user/all", { withCredentials: true })
@@ -91,14 +92,14 @@ const Admin = () => {
             <AdminPlace key={restaurant.placeId} restaurant={restaurant} />
           ))}
         </Places>
-        <FlexDiv>
-          <Title>Users</Title>{" "}
+        <UserFlexDiv>
+          <Title>Users</Title>
           <Button onClick={handleClickOpen}>Create User</Button>
-        </FlexDiv>
+        </UserFlexDiv>
         <Places>
-          {userInfo.map((user) => (
-            <Users key={user._id} user={user} />
-          ))}
+          {userInfo
+            ? userInfo.map((user) => <Users key={user._id} user={user} />)
+            : ""}
         </Places>
 
         <Dialog
@@ -194,6 +195,12 @@ const Title = styled.div`
 const FlexDiv = styled.div`
   display: flex;
   justify-content: space-between;
+`;
+
+const UserFlexDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 110px;
 `;
 
 const Button = styled.button`

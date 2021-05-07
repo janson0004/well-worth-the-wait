@@ -40,6 +40,7 @@ export const COLOR = {
     },
     bg: {
       main: "#F8FAFB",
+      tinted: "#FFFFFF",
       shaded: "#EFF0F1",
     },
     divider: {

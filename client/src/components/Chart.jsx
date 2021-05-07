@@ -2,7 +2,7 @@ import React from "react";
 import { Bar } from "react-chartjs-2";
 import styled from "styled-components/macro";
 
-const Chart = ({ title, data, labels }) => {
+const Chart = ({ title, data, label, labels }) => {
   return (
     <Wrapper>
       <Title>{title}</Title>
@@ -12,7 +12,7 @@ const Chart = ({ title, data, labels }) => {
             labels: labels,
             datasets: [
               {
-                label: "Waiting Time",
+                label: label,
                 data: data,
                 backgroundColor: "rgba(153, 102, 255, 0.2)",
                 borderColor: "rgb(153, 102, 255)",

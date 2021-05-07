@@ -19,6 +19,7 @@ function App() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [loading, setLoading] = useState(true);
 
+  // Initiallize/ fetching data
   useEffect(() => {
     // Get user data
     UserService.getUser()

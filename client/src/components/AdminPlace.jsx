@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components/macro";
 import AdminService from "../services/AdminService";
+import { IoMdRefresh } from "react-icons/io";
 
 const AdminPlace = ({ restaurant, setShowModal, setSelectedPlace }) => {
   const onClickDelete = (placeId) => {
@@ -12,7 +13,15 @@ const AdminPlace = ({ restaurant, setShowModal, setSelectedPlace }) => {
         console.log(error.response.data.message);
       });
   };
-
+  const onClickRefresh = (placeId) => {
+    AdminService.refreshPlace(placeId)
+      .then((res) => {
+        console.log("refreshed");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   const editHandler = () => {
     setShowModal((prev) => !prev);
     setSelectedPlace(restaurant);
@@ -23,10 +32,17 @@ const AdminPlace = ({ restaurant, setShowModal, setSelectedPlace }) => {
       <Name>{restaurant.name}</Name>
       <Address>{restaurant.address}</Address>
       <FlexDiv>
-        <Button onClick={editHandler}>Edit</Button>
-        <DeleteButton onClick={() => onClickDelete(restaurant.placeId)}>
-          Delete
-        </DeleteButton>
+        <EditFlexDiv>
+          <Button onClick={editHandler}>Edit</Button>
+          <DeleteButton onClick={() => onClickDelete(restaurant.placeId)}>
+            Delete
+          </DeleteButton>
+        </EditFlexDiv>
+        <RefreshButton onClick={() => onClickRefresh(restaurant.placeId)}>
+          <ItemText>
+            <IoMdRefresh />
+          </ItemText>
+        </RefreshButton>
       </FlexDiv>
     </Wrapper>
   );
@@ -79,4 +95,27 @@ const DeleteButton = styled.button`
 
 const FlexDiv = styled.div`
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const RefreshButton = styled.button`
+  background-color: #8c9daf;
+  font-size: 16px;
+  font-weight: 500;
+  color: ${({ theme }) => theme.mono.contrast};
+
+  border: none;
+  border-radius: 12px;
+  margin-left: 10px;
+  height: 35px;
+  width: 35px;
+`;
+
+const EditFlexDiv = styled.div`
+  display: flex;
+`;
+
+const ItemText = styled.span`
+  font-size: 18px;
 `;

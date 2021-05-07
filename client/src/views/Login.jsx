@@ -16,7 +16,7 @@ const Login = ({ setShowSidebar }) => {
     UserService.login({ username, password })
       .then((response) => {
         // If user successfully logged in, setAuth to save the user information and redirect to the home page
-        setAuth(response.data);
+        setAuth(response.data.user);
         setShowSidebar(true);
         history.push("/");
       })

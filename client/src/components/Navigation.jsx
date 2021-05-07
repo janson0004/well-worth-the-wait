@@ -187,5 +187,5 @@ const LoginDropDownText = styled.span`
 
 const FlexDiv = styled.div`
   display: flex;
-  align-items: baseline;
+  align-items: center;
 `;

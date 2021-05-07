@@ -18,7 +18,6 @@ import TextField from "@material-ui/core/TextField";
 import { IoMdSend } from "react-icons/io";
 import { RestaurantsContext } from "../contexts/RestaurantsContext";
 import RestaurantService from "../services/RestaurantsService";
-import { useParams } from "react-router-dom";
 import NotFound from "./NotFound";
 
 const mapContainerStyle = {

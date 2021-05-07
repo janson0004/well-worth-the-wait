@@ -31,6 +31,8 @@ const options = {
 };
 
 const Place = () => {
+  const { id } = useParams();
+
   const [libraries] = useState(["places"]);
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_MAP_API_KEY,
@@ -39,6 +41,7 @@ const Place = () => {
 
   const [showInfoWindow, setshowInfoWindow] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [fav, setFav] = useState(false);
   const { restaurants, setRestaurants } = useContext(RestaurantsContext);
   const [restaurant, setRestaurant] = useState(null);
   const [waitTime, setWaitTime] = useState(null);
@@ -57,9 +60,6 @@ const Place = () => {
     ],
     seven_day_wait: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"],
   });
-
-  const [fav, setFav] = useState(false);
-  const { id } = useParams();
 
   useEffect(() => {
     const zeroPad = (num, size) => {
@@ -85,6 +85,7 @@ const Place = () => {
     }
     setWaitTimeLabel({ ...waitTimeLabel, ten_hour_wait: labels });
   }, []);
+
   useEffect(() => {
     setRestaurant(restaurants.find((restaurant) => restaurant.placeId === id));
   }, [restaurants, id]);
@@ -102,6 +103,17 @@ const Place = () => {
 
   const infoWindowHandler = () => {
     setshowInfoWindow(!showInfoWindow);
+  };
+
+  const favPlaceHandler = () => {
+    setFav(!fav);
+    RestaurantService.favPlace({ placeId: restaurant._id })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+      });
   };
 
   if (loadError) return "";
@@ -145,7 +157,7 @@ const Place = () => {
             <Info>
               <NameWrapper>
                 <Name>{restaurant.name}</Name>
-                <Heart clicked={fav ? 1 : 0} onClick={() => setFav(!fav)} />
+                <Heart clicked={fav ? 1 : 0} onClick={favPlaceHandler} />
               </NameWrapper>
               <Address>{restaurant.address}</Address>
               <RatingWrapper>

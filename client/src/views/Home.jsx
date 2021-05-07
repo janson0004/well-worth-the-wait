@@ -1,10 +1,17 @@
-import React, { useState, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useRef,
+  useContext,
+  useCallback,
+} from "react";
 import styled from "styled-components/macro";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 import { useHistory } from "react-router-dom";
 
 import Container from "@material-ui/core/Container";
 import { FaChevronDown, FaSearch } from "react-icons/fa";
+import { MdSearch } from "react-icons/md";
 
 import { RestaurantsContext } from "../contexts/RestaurantsContext";
 
@@ -14,6 +21,9 @@ import TableCell from "@material-ui/core/TableCell";
 
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
+
+import TextField from "@material-ui/core/TextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -38,11 +48,23 @@ const Home = () => {
   const history = useHistory();
   const { restaurants, setRestaurants } = useContext(RestaurantsContext);
   const [reverse, setReverse] = useState(false);
+  const [searchInput, setSearchInput] = useState("");
+
+  const googleMap = useRef();
+  const onMapLoad = useCallback((map) => {
+    googleMap.current = map;
+  }, []);
+
+  const panTo = useCallback((pan, zoom) => {
+    googleMap.current.panTo(pan);
+    googleMap.current.setZoom(zoom);
+  }, []);
 
   const [center, setCenter] = useState({
     lat: 22.310993034714123,
     lng: 114.24018913494935,
   });
+
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_MAP_API_KEY,
     libraries,
@@ -68,12 +90,51 @@ const Home = () => {
     }
   };
 
+  const filterSearch = (item) => {
+    if (searchInput) {
+      let result = item["name"]
+        .toLowerCase()
+        .includes(searchInput.toLowerCase());
+      if (result) {
+        console.log(item);
+      }
+      return result;
+    }
+    return true;
+  };
+
   const sortOnlickHandler = () => {
     setReverse(!reverse);
   };
 
-  if (loadError) return "Error loading maps";
-  if (!isLoaded) return "Loading maps";
+  useEffect(() => {
+    if (googleMap.current) {
+      let searchResult = restaurants.filter(filterSearch);
+      if (searchResult.length === 1) {
+        panTo(
+          {
+            lat: searchResult[0].latitude,
+            lng: searchResult[0].longitude,
+          },
+          20
+        );
+      } else {
+        panTo(
+          {
+            lat: 22.310993034714123,
+            lng: 114.24018913494935,
+          },
+          15
+        );
+      }
+
+      console.log(searchResult);
+      console.log(center);
+    }
+  }, [searchInput]);
+
+  if (loadError) return "";
+  if (!isLoaded) return "";
 
   return (
     <Wrapper>
@@ -83,6 +144,8 @@ const Home = () => {
         zoom={15}
         center={center}
         options={options}
+        ref={googleMap}
+        onLoad={onMapLoad}
       >
         {restaurants.map((marker) => (
           <Marker
@@ -95,7 +158,17 @@ const Home = () => {
       <CustomContainer>
         <FlexDiv>
           <Title>Places</Title>
-          <SearchRightDiv>
+          <SearchWrapper>
+            <SearchField>
+              <MdSearch />
+              <SearchInput
+                placeholder="Search places"
+                value={searchInput}
+                onChange={(e) => setSearchInput(e.target.value)}
+              />
+            </SearchField>
+          </SearchWrapper>
+          {/* <SearchRightDiv>
             <ButtonDiv>
               Name
               <ItemText>
@@ -109,7 +182,7 @@ const Home = () => {
               </ItemText>
               Search places
             </SearchDiv>
-          </SearchRightDiv>
+          </SearchRightDiv> */}
         </FlexDiv>
 
         {/* Table */}
@@ -130,22 +203,24 @@ const Home = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {sorting().map((row) => (
-              <CustomTableRow
-                key={row.name}
-                onClick={() => {
-                  history.push(`/place/${row.placeId}`);
-                }}
-              >
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="left">{row.address}</TableCell>
-                <TableCell align="left">
-                  {row.latitude}, {row.longitude}
-                </TableCell>
-              </CustomTableRow>
-            ))}
+            {sorting()
+              .filter(filterSearch)
+              .map((row) => (
+                <CustomTableRow
+                  key={row.name}
+                  onClick={() => {
+                    history.push(`/place/${row.placeId}`);
+                  }}
+                >
+                  <TableCell component="th" scope="row">
+                    {row.name}
+                  </TableCell>
+                  <TableCell align="left">{row.address}</TableCell>
+                  <TableCell align="left">
+                    {row.latitude}, {row.longitude}
+                  </TableCell>
+                </CustomTableRow>
+              ))}
           </TableBody>
         </Table>
       </CustomContainer>
@@ -155,7 +230,9 @@ const Home = () => {
 
 export default Home;
 
-const Wrapper = styled.div``;
+const Wrapper = styled.div`
+  padding-bottom: 100px;
+`;
 
 const CustomContainer = styled(Container)`
   display: flex;
@@ -222,4 +299,39 @@ const CustomFaChevronDown = styled(FaChevronDown)`
 
 const CustomTableRow = styled(TableRow)`
   cursor: pointer;
+`;
+
+const SearchWrapper = styled.div``;
+
+const SearchField = styled.div`
+  display: flex;
+  align-items: center;
+  flex-basis: calc(100% - 35px - 4px);
+  border: none;
+  background-color: ${({ theme }) => theme.bg.shaded};
+  color: ${({ theme }) => theme.mono.primary};
+  padding: 8px 20px;
+  border-radius: 12px;
+  outline: none;
+  font-size: 16px;
+
+  svg {
+    color: ${({ theme }) => theme.mono.secondary};
+    font-size: 20px;
+    margin-right: 8px;
+  }
+`;
+
+const SearchInput = styled.input`
+  display: block;
+  border: none;
+  background-color: ${({ theme }) => theme.bg.shaded};
+  color: ${({ theme }) => theme.mono.primary};
+  border-radius: 12px;
+  outline: none;
+  font-size: 16px;
+
+  ::placeholder {
+    color: ${({ theme }) => theme.mono.secondary};
+  }
 `;

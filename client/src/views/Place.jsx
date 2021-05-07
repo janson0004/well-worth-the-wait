@@ -7,15 +7,15 @@ import {
   Marker,
   InfoWindow,
 } from "@react-google-maps/api";
+import { MEDIA_BREAK } from "../components/GlobalStyle";
 import Container from "@material-ui/core/Container";
+import TextField from "@material-ui/core/TextField";
 import { FaThumbtack, FaStar } from "react-icons/fa";
+import { IoMdSend } from "react-icons/io";
 import Heart from "../components/ReactAnimatedHeart";
 import Skeleton from "react-loading-skeleton";
 import Chart from "../components/Chart";
-import { MEDIA_BREAK } from "../components/GlobalStyle";
 import Comment from "../components/Comment";
-import TextField from "@material-ui/core/TextField";
-import { IoMdSend } from "react-icons/io";
 import { RestaurantsContext } from "../contexts/RestaurantsContext";
 import RestaurantService from "../services/RestaurantsService";
 import { AuthContext } from "../contexts/AuthContext";

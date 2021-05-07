@@ -272,7 +272,7 @@ const Place = () => {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={onEnterPressHandler}
-                ></CustomTextField>
+                />
                 <Button onClick={addCommentHandler}>
                   <IoMdSend />
                 </Button>

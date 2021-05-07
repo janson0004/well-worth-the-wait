@@ -4,6 +4,7 @@ import Container from "@material-ui/core/Container";
 import AdminPlace from "../components/AdminPlace";
 import AdminService from "../services/AdminService";
 import Users from "../components/Users";
+import EditModal from "../components/EditModal";
 import axios from "axios";
 
 import TextField from "@material-ui/core/TextField";
@@ -21,6 +22,9 @@ const Admin = () => {
   const [password, setPassword] = useState("");
   const [placeId, setPlaceId] = useState("");
   const [userInfo, setUserInfo] = useState("");
+
+  const [showModal, setShowModal] = useState(false);
+  const [selectedPlace, setSelectedPlace] = useState("");
 
   useEffect(() => {
     axios
@@ -81,94 +85,106 @@ const Admin = () => {
   };
 
   return (
-    <Wrapper>
-      <CustomContainer>
-        <FlexDiv>
-          <Title>Places</Title>
-          <Button onClick={handleSignUpOpen}>Create Places</Button>
-        </FlexDiv>
-        <Places>
-          {restaurants.map((restaurant) => (
-            <AdminPlace key={restaurant.placeId} restaurant={restaurant} />
-          ))}
-        </Places>
-        <UserFlexDiv>
-          <Title>Users</Title>
-          <Button onClick={handleClickOpen}>Create User</Button>
-        </UserFlexDiv>
-        <Places>
-          {userInfo
-            ? userInfo.map((user) => <Users key={user._id} user={user} />)
-            : ""}
-        </Places>
+    <>
+      <EditModal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        selectedPlace={selectedPlace}
+      />
+      <Wrapper>
+        <CustomContainer>
+          <FlexDiv>
+            <Title>Places</Title>
+            <Button onClick={handleSignUpOpen}>Create Places</Button>
+          </FlexDiv>
+          <Places>
+            {restaurants.map((restaurant) => (
+              <AdminPlace
+                key={restaurant.placeId}
+                restaurant={restaurant}
+                setShowModal={setShowModal}
+                setSelectedPlace={setSelectedPlace}
+              />
+            ))}
+          </Places>
+          <UserFlexDiv>
+            <Title>Users</Title>
+            <Button onClick={handleClickOpen}>Create User</Button>
+          </UserFlexDiv>
+          <Places>
+            {userInfo
+              ? userInfo.map((user) => <Users key={user._id} user={user} />)
+              : ""}
+          </Places>
 
-        <Dialog
-          open={signUpOpen}
-          onClose={handleSignUpClose}
-          aria-labelledby="form-dialog-title"
-          fullWidth={100}
-        >
-          <CreatePlaceform method="POST" onSubmit={createPlaceHandler}>
-            <DialogTitle id="form-dialog-title">Create New Place</DialogTitle>
-            <DialogContent>
-              <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="placeId"
-                label="placeId"
-                onChange={(e) => setPlaceId(e.target.value)}
-                fullWidth
-              />
-            </DialogContent>
-            <DialogActions>
-              <CreateButton onClick={handleSignUpClose} color="primary">
-                Cancel
-              </CreateButton>
-              <CreateButton>Create</CreateButton>
-            </DialogActions>
-          </CreatePlaceform>
-        </Dialog>
+          <Dialog
+            open={signUpOpen}
+            onClose={handleSignUpClose}
+            aria-labelledby="form-dialog-title"
+            fullWidth={100}
+          >
+            <CreatePlaceform method="POST" onSubmit={createPlaceHandler}>
+              <DialogTitle id="form-dialog-title">Create New Place</DialogTitle>
+              <DialogContent>
+                <TextField
+                  required
+                  autoFocus
+                  margin="dense"
+                  id="placeId"
+                  label="placeId"
+                  onChange={(e) => setPlaceId(e.target.value)}
+                  fullWidth
+                />
+              </DialogContent>
+              <DialogActions>
+                <CreateButton onClick={handleSignUpClose} color="primary">
+                  Cancel
+                </CreateButton>
+                <CreateButton>Create</CreateButton>
+              </DialogActions>
+            </CreatePlaceform>
+          </Dialog>
 
-        <Dialog
-          open={open}
-          onClose={handleClose}
-          aria-labelledby="form-dialog-title"
-        >
-          <SignupForm method="POST" onSubmit={submitHandler}>
-            <DialogTitle id="form-dialog-title">Create User</DialogTitle>
-            <DialogContent>
-              <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="username"
-                label="username"
-                onChange={(e) => setUsername(e.target.value)}
-                fullWidth
-              />
-              <TextField
-                required
-                autoFocus
-                margin="dense"
-                id="password"
-                label="password"
-                type="password"
-                autoComplete="current-password"
-                fullWidth
-                onChange={(e) => setPassword(e.target.value)}
-              />
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={handleClose} color="primary">
-                Cancel
-              </Button>
-              <Button color="primary">Create</Button>
-            </DialogActions>
-          </SignupForm>
-        </Dialog>
-      </CustomContainer>
-    </Wrapper>
+          <Dialog
+            open={open}
+            onClose={handleClose}
+            aria-labelledby="form-dialog-title"
+          >
+            <SignupForm method="POST" onSubmit={submitHandler}>
+              <DialogTitle id="form-dialog-title">Create User</DialogTitle>
+              <DialogContent>
+                <TextField
+                  required
+                  autoFocus
+                  margin="dense"
+                  id="username"
+                  label="username"
+                  onChange={(e) => setUsername(e.target.value)}
+                  fullWidth
+                />
+                <TextField
+                  required
+                  autoFocus
+                  margin="dense"
+                  id="password"
+                  label="password"
+                  type="password"
+                  autoComplete="current-password"
+                  fullWidth
+                  onChange={(e) => setPassword(e.target.value)}
+                />
+              </DialogContent>
+              <DialogActions>
+                <Button onClick={handleClose} color="primary">
+                  Cancel
+                </Button>
+                <Button color="primary">Create</Button>
+              </DialogActions>
+            </SignupForm>
+          </Dialog>
+        </CustomContainer>
+      </Wrapper>
+    </>
   );
 };
 

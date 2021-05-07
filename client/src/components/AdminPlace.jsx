@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components/macro";
 import AdminService from "../services/AdminService";
 
-const AdminPlace = ({ restaurant }) => {
+const AdminPlace = ({ restaurant, setShowModal, setSelectedPlace }) => {
   const onClickDelete = (placeId) => {
     AdminService.deletePlace(placeId)
       .then((res) => {
@@ -12,12 +12,18 @@ const AdminPlace = ({ restaurant }) => {
         console.log(error.response.data.message);
       });
   };
+
+  const editHandler = () => {
+    setShowModal((prev) => !prev);
+    setSelectedPlace(restaurant);
+  };
+
   return (
     <Wrapper>
       <Name>{restaurant.name}</Name>
       <Address>{restaurant.address}</Address>
       <FlexDiv>
-        <Button>Edit</Button>
+        <Button onClick={editHandler}>Edit</Button>
         <DeleteButton onClick={() => onClickDelete(restaurant.placeId)}>
           Delete
         </DeleteButton>
@@ -32,7 +38,7 @@ const Wrapper = styled.div`
   padding: 30px;
   background-color: ${({ theme }) => theme.bg.main};
   border-radius: 12px;
-  max-width: 384px;
+  width: 384px;
   margin: 10px 20px;
 `;
 

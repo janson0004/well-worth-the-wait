@@ -1,6 +1,8 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Switch, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components/macro";
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en";
 import { COLOR, GlobalStyle, ResetStyle } from "./components/GlobalStyle";
 import { AuthContext } from "./contexts/AuthContext";
 import UserService from "./services/UserService";
@@ -19,6 +21,10 @@ function App() {
   const { setRestaurants } = useContext(RestaurantsContext);
   const [showSidebar, setShowSidebar] = useState(false);
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    TimeAgo.addDefaultLocale(en);
+  }, []);
 
   // Initiallize/ fetching data
   useEffect(() => {
@@ -51,35 +57,28 @@ function App() {
         <ResetStyle />
         <GlobalStyle />
         <Navigation showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
-        <Switch>
-          {!loading && auth && (
-            <>
-              <Route exact path="/">
-                <Home />
-              </Route>
-              <Route path="/favplaces">
-                <FavPlaces />
-              </Route>
-              <Route path="/place/:id">
-                <Place />
-              </Route>
-              <Route path="/">
-                <NotFound />
-              </Route>
-              {auth.role === "Admin" && (
-                <Route path="/admin">
-                  <Admin />
-                </Route>
-              )}
-            </>
-          )}
-          {loading && <Loader />}
-          {!auth && (
+        {!loading && auth && (
+          <Switch>
             <Route exact path="/">
-              <Login setShowSidebar={setShowSidebar} />
+              <Home />
             </Route>
-          )}
-        </Switch>
+            <Route path="/favplaces">
+              <FavPlaces />
+            </Route>
+            <Route path="/place/:id">
+              <Place />
+            </Route>
+            <Route>
+              <NotFound />
+            </Route>
+          </Switch>
+        )}
+        {loading && <Loader />}
+        {!auth && (
+          <Route exact path="/">
+            <Login setShowSidebar={setShowSidebar} />
+          </Route>
+        )}
       </ThemeProvider>
     </>
   );

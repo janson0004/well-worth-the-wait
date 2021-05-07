@@ -1,14 +1,17 @@
 import React from "react";
 import styled from "styled-components/macro";
+import ReactTimeAgo from "react-time-ago";
 
-const Comment = () => {
+const Comment = ({ comment }) => {
   return (
     <Wrapper>
       <FlexWrapper>
-        <Name>Janson</Name>
-        <Timespan>5 mins ago</Timespan>
+        <Name>{comment.username}</Name>
+        <Timespan>
+          <ReactTimeAgo date={new Date(comment.created_time)} locale="en-US" />
+        </Timespan>
       </FlexWrapper>
-      <Content>Yummy!!</Content>
+      <Content>{comment.message}</Content>
     </Wrapper>
   );
 };
@@ -19,6 +22,7 @@ const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.bg.main};
   padding: 20px 20px;
   border-radius: 12px;
+  margin-bottom: 10px;
 `;
 
 const FlexWrapper = styled.div`
@@ -34,6 +38,9 @@ const Name = styled.span`
   margin-right: 16px;
 `;
 
-const Timespan = styled.span``;
+const Timespan = styled.span`
+  font-size: 14px;
+  color: ${({ theme }) => theme.mono.secondary};
+`;
 
 const Content = styled.span``;

@@ -7,6 +7,9 @@ const AdminService = {
   editPlace: (placeId) => {
     return axios.put(`/restaurant/${placeId}`, { withCredentials: true });
   },
+  createPlace: (data) => {
+    return axios.post("/restaurant", data, { withCredentials: true });
+  },
   deleteUser: () => {
     return axios.delete("/user", { withCredentials: true });
   },

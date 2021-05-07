@@ -138,7 +138,7 @@ const Place = () => {
   const addCommentHandler = () => {
     RestaurantService.addComment({ placeId: id, message: input })
       .then((res) => {
-        setRestaurants(
+        setRestaurant(
           restaurants.map((restaurant) => {
             if (restaurant.placeId === id) {
               restaurant.comment.push(res.data);

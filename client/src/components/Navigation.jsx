@@ -42,7 +42,7 @@ const Navigation = ({ showSidebar, setShowSidebar }) => {
   return (
     <Wrapper expand="lg">
       <CustomContainer>
-        <Navbar.Brand>
+        <Navbar.Brand onClick={IconOnClick}>
           <Brand>Restaurants</Brand>
         </Navbar.Brand>
         {showSidebar && (

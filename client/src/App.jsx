@@ -39,12 +39,12 @@ function App() {
             setLoading(false);
           })
           .catch((error) => {
-            console.log(error.response.data.message);
+            console.log(error);
             setLoading(false);
           });
       })
       .catch((error) => {
-        console.log(error.response.data.message);
+        console.log(error);
         setLoading(false);
         history.push("/");
       });

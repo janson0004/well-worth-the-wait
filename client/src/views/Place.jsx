@@ -7,15 +7,15 @@ import {
   Marker,
   InfoWindow,
 } from "@react-google-maps/api";
+import { MEDIA_BREAK } from "../components/GlobalStyle";
 import Container from "@material-ui/core/Container";
+import TextField from "@material-ui/core/TextField";
 import { FaThumbtack, FaStar } from "react-icons/fa";
+import { IoMdSend } from "react-icons/io";
 import Heart from "../components/ReactAnimatedHeart";
 import Skeleton from "react-loading-skeleton";
 import Chart from "../components/Chart";
-import { MEDIA_BREAK } from "../components/GlobalStyle";
 import Comment from "../components/Comment";
-import TextField from "@material-ui/core/TextField";
-import { IoMdSend } from "react-icons/io";
 import { RestaurantsContext } from "../contexts/RestaurantsContext";
 import RestaurantService from "../services/RestaurantsService";
 import { AuthContext } from "../contexts/AuthContext";
@@ -46,7 +46,7 @@ const Place = () => {
   const [loading, setLoading] = useState(true);
   const [fav, setFav] = useState(false);
   const { auth, setAuth } = useContext(AuthContext);
-  const { restaurants } = useContext(RestaurantsContext);
+  const { restaurants, setRestaurants } = useContext(RestaurantsContext);
   const [restaurant, setRestaurant] = useState(null);
   const [waitTime, setWaitTime] = useState(null);
   const [popularTime, setPopularTime] = useState(null);
@@ -83,7 +83,8 @@ const Place = () => {
     setLabel({ ...Label, ten_hour: labels });
 
     // Get if user have fav this place
-    setFav(auth.fav_place.find((place) => place.placeId === id));
+
+    setFav(auth.fav_place.find((place) => place.placeId === id) ? true : false);
   }, []);
 
   useEffect(() => {
@@ -117,15 +118,21 @@ const Place = () => {
   };
 
   const favPlaceHandler = () => {
-    setFav(!fav);
     RestaurantService.favPlace({ placeId: restaurant._id, isFav: fav })
       .then((res) => {
-        console.log(res.data);
+        if (fav) {
+          setAuth({
+            ...auth,
+            fav_place: auth.fav_place.filter((place) => place.placeId !== id),
+          });
+        } else {
+          setAuth({ ...auth, fav_place: [...auth.fav_place, restaurant] });
+        }
+        setFav(!fav);
       })
       .catch((error) => {
         console.log(error.response.data);
       });
-    setAuth(auth.fav_place.filter((place) => place.placeId !== id));
   };
 
   const onEnterPressHandler = (e) => {

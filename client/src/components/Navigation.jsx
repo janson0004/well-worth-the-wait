@@ -37,15 +37,14 @@ const Navigation = ({ showSidebar, setShowSidebar }) => {
     Logout();
   };
 
-  const IconOnClick = () => {
-    history.push("/");
-  };
   return (
     <Wrapper expand="lg">
       <CustomContainer>
-        <Navbar.Brand onClick={IconOnClick}>
-          <Brand>Restaurants</Brand>
-        </Navbar.Brand>
+        <NavItem to="/">
+          <Navbar.Brand>
+            <Brand>Restaurants</Brand>
+          </Navbar.Brand>
+        </NavItem>
         {showSidebar && (
           <FlexDiv>
             {auth.role === "Admin" ? (
@@ -137,6 +136,7 @@ const DropDownItem = styled.div`
 const DropDown = styled.div`
   display: flex;
   align-items: center;
+  cursor: pointer;
 `;
 
 const Name = styled.span`
@@ -150,7 +150,6 @@ const CustomFaChevronDown = styled(FaChevronDown)`
   width: 16px;
   height: 21px;
   margin-left: 12px;
-  cursor: pointer;
 `;
 
 const DownWrapper = styled.div`

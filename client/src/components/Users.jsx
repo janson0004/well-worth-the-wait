@@ -2,11 +2,18 @@ import React from "react";
 import styled from "styled-components/macro";
 import AdminService from "../services/AdminService";
 
-const Users = ({ user, setShowModal, setSelectedUser }) => {
+const Users = ({
+  user,
+  setShowModal,
+  setSelectedUser,
+  userInfo,
+  setUserInfo,
+}) => {
   const onClickDelete = (userId) => {
     AdminService.deletePlace(userId)
       .then((res) => {
-        alert("Deteled successfully");
+        setUserInfo(userInfo.filter((user) => user._id !== userId));
+        alert("Deleted successfully");
       })
       .catch((error) => {
         console.log(error.response.data.message);

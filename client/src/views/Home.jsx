@@ -94,9 +94,17 @@ const Home = () => {
 
   const filterSearch = (item) => {
     if (searchInput) {
-      let result = item[searchBy]
-        .toLowerCase()
-        .includes(searchInput.toLowerCase());
+      let result;
+      if (searchBy === "coordinates") {
+        result = (item["latitude"] + ", " + item["longitude"])
+          .toString()
+          .includes(searchInput.toLowerCase());
+      } else {
+        result = item[searchBy]
+          .toString()
+          .toLowerCase()
+          .includes(searchInput.toLowerCase());
+      }
       if (result) {
         console.log(item);
       }

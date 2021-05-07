@@ -1,14 +1,14 @@
 import React from "react";
 import styled from "styled-components/macro";
 
-const Comment = () => {
+const Comment = ({ comment }) => {
   return (
     <Wrapper>
       <FlexWrapper>
-        <Name>Janson</Name>
+        <Name>{comment.username}</Name>
         <Timespan>5 mins ago</Timespan>
       </FlexWrapper>
-      <Content>Yummy!!</Content>
+      <Content>{comment.message}</Content>
     </Wrapper>
   );
 };
@@ -19,6 +19,7 @@ const Wrapper = styled.div`
   background-color: ${({ theme }) => theme.bg.main};
   padding: 20px 20px;
   border-radius: 12px;
+  margin-bottom: 10px;
 `;
 
 const FlexWrapper = styled.div`

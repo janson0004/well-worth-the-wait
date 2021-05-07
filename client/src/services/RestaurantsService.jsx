@@ -15,6 +15,9 @@ const RestaurantService = {
   favPlace: (data) => {
     return axios.post("/restaurant/fav", data, { withCredentials: true });
   },
+  addComment: (data) => {
+    return axios.post("/restaurant/comment", data, { withCredentials: true });
+  },
 };
 
 export default RestaurantService;

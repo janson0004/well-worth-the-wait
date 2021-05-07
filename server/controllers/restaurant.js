@@ -22,7 +22,7 @@ exports.restaurant_test = (req, res, next) => {
 };
 
 //API for getting restaurant waiting time
-exports.restaurant_time = (req, res, next) => {
+exports.restaurant_wait = (req, res, next) => {
   let dataset = [];
   const python = spawn("python3", [
     "populartimes_api.py",
@@ -73,6 +73,61 @@ exports.restaurant_time = (req, res, next) => {
     }
 
     res.json({ ten_hour_wait, seven_day_wait });
+  });
+};
+
+//API for getting restaurant popular time
+exports.restaurant_popular = (req, res, next) => {
+  let dataset = [];
+  const python = spawn("python3", [
+    "populartimes_api.py",
+    req.params["placeId"],
+  ]);
+
+  python.stdout.on("data", (data) => {
+    dataset.push(data);
+  });
+
+  python.on("close", (code) => {
+    dataset = JSON.parse(dataset.join(""));
+
+    let date = new Date();
+    let d = date.getDay() || 7 - 1;
+    let h = date.getHours();
+    let populartimes = [];
+    let ten_hour_popular = [];
+    let seven_day_popular = [];
+    let index = 24 * (d - 1) + h;
+
+    dataset = dataset.populartimes;
+
+    for (let day in dataset) {
+      let object = dataset[day];
+      let data = object.data;
+
+      for (let hour in data) {
+        populartimes.push(data[hour]);
+      }
+    }
+
+    if (d == 0 && h < 9) {
+      for (let i = 159 + h; i <= 167; i++) {
+        ten_hour_popular.push(populartimes[i]);
+      }
+      for (let j = 0; j <= h; j++) {
+        ten_hour_popular.push(populartimes[j]);
+      }
+    } else {
+      for (let i = index - 9; i <= index; i++) {
+        ten_hour_popular.push(populartimes[i]);
+      }
+    }
+
+    for (let i = h; i <= 144 + h; i += 24) {
+      seven_day_popular.push(populartimes[i]);
+    }
+
+    res.json({ ten_hour_popular, seven_day_popular });
   });
 };
 

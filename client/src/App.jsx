@@ -1,8 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import { Switch, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components/macro";
-import TimeAgo from "javascript-time-ago";
-import en from "javascript-time-ago/locale/en";
 import { COLOR, GlobalStyle, ResetStyle } from "./components/GlobalStyle";
 import { AuthContext } from "./contexts/AuthContext";
 import UserService from "./services/UserService";
@@ -22,9 +20,7 @@ function App() {
   const [showSidebar, setShowSidebar] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    TimeAgo.addDefaultLocale(en);
-  }, []);
+  useEffect(() => {}, []);
 
   // Initiallize/ fetching data
   useEffect(() => {
@@ -33,6 +29,7 @@ function App() {
       .then((response) => {
         setAuth(response.data);
         setShowSidebar(true);
+        console.log(12);
 
         // Get restaurants data
         RestaurantsService.getAll()

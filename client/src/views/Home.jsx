@@ -113,7 +113,7 @@ const Home = () => {
                 Name
                 <ItemText>
                   <CustomFaChevronDown
-                    clicked={clicked}
+                    clicked={clicked ? 1 : 0}
                     onClick={() => sortOnlickHandler(clicked)}
                   />
                 </ItemText>

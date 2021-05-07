@@ -39,9 +39,11 @@ const Navigation = ({ showSidebar, setShowSidebar }) => {
   return (
     <Wrapper expand="lg">
       <CustomContainer>
-        <Navbar.Brand>
-          <Brand>Restaurants</Brand>
-        </Navbar.Brand>
+        <NavItem to="/">
+          <Navbar.Brand>
+            <Brand>Restaurants</Brand>
+          </Navbar.Brand>
+        </NavItem>
         {showSidebar && (
           <FlexDiv>
             <NavItem to="/favplace">

@@ -23,7 +23,10 @@ router.get("/", RestaurantController.restaurant_all);
 router.get("/:placeId", RestaurantController.restaurant_one);
 
 //get route for getting restaurant waiting time
-router.get("/time/:placeId", RestaurantController.restaurant_time);
+router.get("/wait/:placeId", RestaurantController.restaurant_wait);
+
+//get route for getting restaurant popular time
+router.get("/popular/:placeId", RestaurantController.restaurant_popular);
 
 //put route for updating specified restaurant
 router.put(

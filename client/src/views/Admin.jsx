@@ -1,69 +1,23 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components/macro";
 import Container from "@material-ui/core/Container";
-import FavPlace from "../components/FavPlace";
+import AdminPlace from "../components/AdminPlace";
+import AdminService from "../services/AdminService";
 
-const restaurants = [
-  {
-    placeId: "ChIJc91gg_IDBDQRTSK8--GRgCI",
-    name: "Fishing Heya",
-    address:
-      "Shop B3, Treasure World, Site 11, Whampoa Garden, Hung Hom, Hong Kong",
-    rating: 3.9,
-    latitude: 22.3061193,
-    longitude: 114.260494,
-  },
-  {
-    placeId: "ChIJc91gg_IDBDQRTSK8--GRgCI",
-    name: "Fishing Heya",
-    address:
-      "Shop B3, Treasure World, Site 11, Whampoa Garden, Hung Hom, Hong Kong",
-    rating: 3.9,
-    latitude: 22.3061193,
-    longitude: 114.260494,
-  },
-
-  {
-    placeId: "ChIJc91gg_IDBDQRTSK8--GRgCI",
-    name: "Fishing Heya",
-    address:
-      "Shop B3, Treasure World, Site 11, Whampoa Garden, Hung Hom, Hong Kong",
-    rating: 3.9,
-    latitude: 22.3061193,
-    longitude: 114.260494,
-  },
-
-  {
-    placeId: "ChIJc91gg_IDBDQRTSK8--GRgCI",
-    name: "Fishing Heya",
-    address:
-      "Shop B3, Treasure World, Site 11, Whampoa Garden, Hung Hom, Hong Kong",
-    rating: 3.9,
-    latitude: 22.3061193,
-    longitude: 114.260494,
-  },
-
-  {
-    placeId: "ChIJc91gg_IDBDQRTSK8--GRgCI",
-    name: "Fishing Heya",
-    address:
-      "Shop B3, Treasure World, Site 11, Whampoa Garden, Hung Hom, Hong Kong",
-    rating: 3.9,
-    latitude: 22.3061193,
-    longitude: 114.260494,
-  },
-];
+import { RestaurantsContext } from "../contexts/RestaurantsContext";
 
 const Admin = () => {
+  const { restaurants, setRestaurants } = useContext(RestaurantsContext);
   return (
     <Wrapper>
       <CustomContainer>
         <Title>Places</Title>
         <Places>
           {restaurants.map((restaurant) => (
-            <FavPlace key={restaurant.placeId} restaurant={restaurant} />
+            <AdminPlace key={restaurant.placeId} restaurant={restaurant} />
           ))}
         </Places>
+        <Title>Users</Title>
       </CustomContainer>
     </Wrapper>
   );

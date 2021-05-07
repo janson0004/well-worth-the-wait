@@ -68,6 +68,11 @@ function App() {
             <Route path="/place/:id">
               <Place />
             </Route>
+            {auth.role === "Admin" && (
+              <Route path="/admin">
+                <Admin />
+              </Route>
+            )}
             <Route>
               <NotFound />
             </Route>

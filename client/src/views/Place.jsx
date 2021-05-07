@@ -216,21 +216,25 @@ const Place = () => {
                 <Chart
                   title="Waiting Time in the past 10 hours"
                   data={waitTime.ten_hour}
+                  label="Waiting Time"
                   labels={Label.ten_hour}
                 />
                 <Chart
                   title="Waiting Time in this hour of past 7 days"
                   data={waitTime.seven_day}
+                  label="Waiting Time"
                   labels={Label.seven_day}
                 />
                 <Chart
                   title="Popular Time in the past 10 hours"
                   data={popularTime.ten_hour}
+                  label="Popular Time"
                   labels={Label.ten_hour}
                 />
                 <Chart
                   title="Popular Time in this hour of past 7 days"
                   data={popularTime.seven_day}
+                  label="Popular Time"
                   labels={Label.seven_day}
                 />
               </>

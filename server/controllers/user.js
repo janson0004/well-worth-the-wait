@@ -46,6 +46,7 @@ exports.user_signup = (req, res, next) => {
 // API for user login, requires username and password in body
 exports.user_login = (req, res, next) => {
   User.findOne({ username: req.body.username })
+    .populate("fav_place")
     .then((user) => {
       if (user == null) {
         return res.status(401).json({
@@ -77,7 +78,7 @@ exports.user_login = (req, res, next) => {
               httpOnly: true,
               // secure: true,
             })
-            .send("Logged in");
+            .json({ user: user, message: "Logged in" });
         }
         res.status(401).json({
           message: "Incorrect password",

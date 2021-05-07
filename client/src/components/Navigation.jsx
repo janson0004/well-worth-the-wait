@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import { FaHeart, FaChevronDown, FaSignOutAlt } from "react-icons/fa";
 import { AuthContext } from "../contexts/AuthContext";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import UserService from "../services/UserService";
 
 const Navigation = ({ showSidebar, setShowSidebar }) => {
@@ -25,7 +25,7 @@ const Navigation = ({ showSidebar, setShowSidebar }) => {
       });
   };
 
-  const DropDownHandler = (showDropDown) => {
+  const dropDownHandler = () => {
     setShowDropDown(!showDropDown);
   };
 
@@ -37,48 +37,39 @@ const Navigation = ({ showSidebar, setShowSidebar }) => {
   };
 
   return (
-    <Wrapper>
-      <CustomNavbar expand="lg">
-        <CustomContainer>
-          <Navbar.Brand>
-            <Brand>Restaurants</Brand>
-          </Navbar.Brand>
-          {showSidebar && (
-            <>
-              <FlexDiv>
-                <IconItem>
-                  <FaHeart />
-                </IconItem>
-                <OutDropDown>
-                  <FlexDiv onClick={() => DropDownHandler(showDropDown)}>
-                    <Name>{auth ? auth.username : ""}</Name>
-                    <CustomFaChevronDown />
-                  </FlexDiv>
-                  <DownWrapper showDropDown={showDropDown}>
-                    <BlockWrapper>
-                      <LogoutWrapper onClick={onClickHandler}>
-                        <CustomFaSignOutAlt />
-                        <LoginDropDownText>Logout</LoginDropDownText>
-                      </LogoutWrapper>
-                    </BlockWrapper>
-                  </DownWrapper>
-                </OutDropDown>
-              </FlexDiv>
-            </>
-          )}
-        </CustomContainer>
-      </CustomNavbar>
+    <Wrapper expand="lg">
+      <CustomContainer>
+        <Navbar.Brand>
+          <Brand>Restaurants</Brand>
+        </Navbar.Brand>
+        {showSidebar && (
+          <FlexDiv>
+            <NavItem to="/favplace">
+              <FaHeart />
+            </NavItem>
+            <DropDownItem>
+              <DropDown onClick={dropDownHandler}>
+                <Name>{auth ? auth.username : ""}</Name>
+                <CustomFaChevronDown />
+              </DropDown>
+              <DownWrapper showDropDown={showDropDown}>
+                <LogoutWrapper onClick={onClickHandler}>
+                  <CustomFaSignOutAlt />
+                  <LoginDropDownText>Logout</LoginDropDownText>
+                </LogoutWrapper>
+              </DownWrapper>
+            </DropDownItem>
+          </FlexDiv>
+        )}
+      </CustomContainer>
     </Wrapper>
   );
 };
 
 export default Navigation;
 
-const Wrapper = styled.div`
-  background-color: white;
-`;
-
-const CustomNavbar = styled(Navbar)`
+const Wrapper = styled(Navbar)`
+  background-color: ${({ theme }) => theme.bg.tinted};
   padding-top: 20px;
   padding-bottom: 10px;
   position: relative;
@@ -91,7 +82,7 @@ const CustomNavbar = styled(Navbar)`
   }
 
   .navbar-toggler {
-    color: white;
+    color: ${({ theme }) => theme.mono.contrast};
     border: none;
   }
   .navbar-nav {
@@ -110,84 +101,91 @@ const CustomContainer = styled(Container)`
 const Brand = styled.span`
   font-size: 24px;
   font-weight: 700;
-  color: #7d68ff;
+  color: ${({ theme }) => theme.theme.main};
   font-family: "roboto";
 `;
 
-const IconItem = styled.span`
+const NavItem = styled(Link)`
   font-size: 20px;
-  color: #4b4b4b;
+  color: ${({ theme }) => theme.mono.secondary};
+  text-decoration: none;
+
+  :hover,
+  :focus,
+  :visited {
+    color: ${({ theme }) => theme.mono.secondary};
+  }
 `;
-const OutDropDown = styled.div``;
+
+const DropDownItem = styled.div`
+  margin-left: 30px;
+  position: relative;
+`;
+
+const DropDown = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const Name = styled.span`
+  color: ${({ theme }) => theme.mono.secondary};
+  font-size: 18px;
+  font-weight: 700;
+`;
 
 const CustomFaChevronDown = styled(FaChevronDown)`
-  color: #4b4b4b;
-  width: 18px;
-  height: 23px;
-  margin-right: 14px;
+  color: ${({ theme }) => theme.mono.secondary};
+  width: 16px;
+  height: 21px;
   margin-left: 12px;
   cursor: pointer;
 `;
 
 const DownWrapper = styled.div`
-  background-color: white;
+  background-color: ${({ theme }) => theme.bg.tinted};
   position: absolute;
   right: 0;
   z-index: 9999;
-  display: flex;
-  align-items: center;
-  width: 204px;
-  height: 67px;
-  justify-content: center;
+  width: 150px;
+  padding: 12px;
   margin-top: 12px;
+  display: flex;
+  justify-content: flex-end;
+  box-shadow: 2px 2px 2px -2px ${({ theme }) => theme.divider.main};
   pointer-events: ${(props) => (props.showDropDown ? "all" : "none")};
   transform: ${(props) => (props.showDropDown ? "scale(1.15)" : "scale(1)")};
   opacity: ${(props) => (props.showDropDown ? "1" : "0")};
   transition: all 200ms cubic-bezier(0.87, 0, 0.11, 1.2);
 `;
 
-const BlockWrapper = styled.div`
-  cursor: pointer;
-  user-select: none;
-  display: flex;
-`;
 const LogoutWrapper = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  cursor: pointer;
+  position: relative;
+  z-index: 100;
 `;
 
 const CustomFaSignOutAlt = styled(FaSignOutAlt)`
-  width: 20px;
-  height: 23px;
-  color: #4b4b4b;
-  cursor: pointer;
+  width: 16px;
+  height: 20px;
+  color: ${({ theme }) => theme.mono.secondary};
   position: relative;
   z-index: 100;
 `;
 
 const LoginDropDownText = styled.span`
-  font-family: "Roboto";
-  color: #4b4b4b;
-  font-size: 20px;
+  color: ${({ theme }) => theme.mono.secondary};
+  font-size: 14px;
   font-weight: 500;
-  cursor: pointer;
-  position: relative;
-  z-index: 100;
-  margin-left: 12px;
+  margin-left: 10px;
+
   :hover {
     text-decoration: none;
   }
 `;
 
-const Name = styled.span`
-  color: #4b4b4b;
-  font-size: 20px;
-  font-weight: 700;
-  font-family: "Roboto";
-  margin-left: 47px;
-`;
-
 const FlexDiv = styled.div`
   display: flex;
+  align-items: center;
 `;

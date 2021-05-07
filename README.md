@@ -2,6 +2,10 @@
 
 ## Run it locally (Not in VM)
 
+```
+git clone https://github.com/janson0004/well-worth-the-wait.git
+```
+
 ### client
 
 Navigate to client folder, install dependencies
@@ -15,6 +19,14 @@ Start the client side
 
 ```
 npm start
+```
+
+#### Environment variable
+
+Create a .env.local file under the client folder, and set the environment variable:
+
+```
+REACT_APP_MAP_API_KEY=your_google_api_key
 ```
 
 ### server
@@ -39,6 +51,9 @@ npm start
 ```
 python3 -m venv env       # Create virtual environment
 source env/bin/activate   # Get into virtual environment
+```
+
+```
 deactivate                # Exit virtual environment
 ```
 
@@ -54,6 +69,11 @@ virtualenv env
 
 ```
 pip3 install -r requirements.txt
+```
+
+```
+cd populartimes
+pip3 install .
 ```
 
 #### Environment variable

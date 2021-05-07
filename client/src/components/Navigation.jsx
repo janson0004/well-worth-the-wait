@@ -4,8 +4,8 @@ import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import { FaHeart, FaChevronDown, FaSignOutAlt } from "react-icons/fa";
 import { AuthContext } from "../contexts/AuthContext";
-import axios from "axios";
 import { useHistory } from "react-router-dom";
+import UserService from "../services/UserService";
 
 const Navigation = ({ showSidebar, setShowSidebar }) => {
   const { auth, setAuth } = useContext(AuthContext);
@@ -14,10 +14,7 @@ const Navigation = ({ showSidebar, setShowSidebar }) => {
 
   const Logout = () => {
     // Send a delete request to clear the cookie and the information
-    axios
-      .post("/user/logout", {
-        withCredentials: true,
-      })
+    UserService.logout()
       .then((response) => {
         history.push("/");
         setShowSidebar(false);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import styled from "styled-components/macro";
 import {
   GoogleMap,
@@ -14,6 +14,8 @@ import { MEDIA_BREAK } from "../components/GlobalStyle";
 import Comment from "../components/Comment";
 import TextField from "@material-ui/core/TextField";
 import { IoMdSend } from "react-icons/io";
+import { RestaurantsContext } from "../contexts/RestaurantsContext";
+import { useParams } from "react-router-dom";
 
 const mapContainerStyle = {
   width: "100%",
@@ -47,15 +49,15 @@ const waitTimeLabel = {
   seven_day_wait: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"],
 };
 
-const restaurant = {
-  placeId: "ChIJc91gg_IDBDQRTSK8--GRgCI",
-  name: "Fishing Heya",
-  address:
-    "Shop B3, Treasure World, Site 11, Whampoa Garden, Hung Hom, Hong Kong",
-  rating: 3.9,
-  latitude: 22.3061193,
-  longitude: 114.260494,
-};
+// const restaurant = {
+//   placeId: "ChIJc91gg_IDBDQRTSK8--GRgCI",
+//   name: "Fishing Heya",
+//   address:
+//     "Shop B3, Treasure World, Site 11, Whampoa Garden, Hung Hom, Hong Kong",
+//   rating: 3.9,
+//   latitude: 22.3061193,
+//   longitude: 114.260494,
+// };
 
 const Place = () => {
   const [libraries] = useState(["places"]);
@@ -63,98 +65,108 @@ const Place = () => {
     lat: 22.3061193,
     lng: 114.260494,
   });
-  const [showInfoWindow, setshowInfoWindow] = useState(false);
-
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_MAP_API_KEY,
     libraries,
   });
 
+  const [showInfoWindow, setshowInfoWindow] = useState(false);
+  const { restaurants, setRestaurants } = useContext(RestaurantsContext);
+  const [restaurant, setRestaurant] = useState(null);
+
   const [fav, setFav] = useState(false);
+  const { id } = useParams();
+
+  useEffect(() => {
+    setRestaurant(restaurants.find((restaurant) => restaurant.placeId === id));
+  }, [restaurants, id]);
 
   const infoWindowHandler = () => {
     setshowInfoWindow(!showInfoWindow);
   };
 
-  if (loadError) return "Error loading maps";
-  if (!isLoaded) return "Loading maps";
+  if (loadError) return "";
+  if (!isLoaded) return "";
   return (
     <Wrapper>
-      <GoogleMap
-        mapContainerStyle={mapContainerStyle}
-        zoom={20}
-        center={center}
-        options={options}
-      >
-        {/* Marker props
+      <>
+        <GoogleMap
+          mapContainerStyle={mapContainerStyle}
+          zoom={20}
+          center={center}
+          options={options}
+        >
+          {/* Marker props
         icon={{
           url: "/assets/img", 
           scaledSize: new window.google.maps.Size(30, 30), 
           origin: new window.google.maps.Point(0, 0), 
           anchor: new window.google.map.Point(15, 15)
         }} */}
-        <Marker position={center} onClick={infoWindowHandler} />
-        {showInfoWindow && (
-          <InfoWindow position={center} onCloseClick={infoWindowHandler}>
-            <>
-              <InfoWindowName>{restaurant.name}</InfoWindowName>
-              <InfoWindowAddress>{restaurant.address}</InfoWindowAddress>
-            </>
-          </InfoWindow>
-        )}
-      </GoogleMap>
-      <CustomContainer>
-        <LeftWrapper>
-          <Info>
-            <NameWrapper>
-              <Name>{restaurant.name}</Name>
-              <Heart isClick={fav} onClick={() => setFav(!fav)} />
-            </NameWrapper>
-            <Address>{restaurant.address}</Address>
-            <RatingWrapper>
-              <Rating>{restaurant.rating}</Rating>
-              <FaStar />
-              <FaStar />
-              <FaStar />
-              <FaStar />
-              <FaStar />
-            </RatingWrapper>
-            <LocationWrapper>
-              <FaThumbtack />
-              <Location>{`${restaurant.latitude}, ${restaurant.longitude}`}</Location>
-            </LocationWrapper>
-          </Info>
-          <Chart
-            title="Waiting Time in the past 10 hours"
-            data={waitTimeData.ten_hour_wait}
-            labels={waitTimeLabel.ten_hour_wait}
-          />
-          <Chart
-            title="Waiting Time in this hour of past 7 days"
-            data={waitTimeData.seven_day_wait}
-            labels={waitTimeLabel.seven_day_wait}
-          />
-        </LeftWrapper>
-        <RightWrapper>
-          <Comments>
-            <CommentsTitle>Comments</CommentsTitle>
-            <TextFieldWrapper>
-              <CustomTextField
-                multiline
-                variant="filled"
-                label="Enter your comment..."
-                InputProps={{ disableUnderline: true }}
-                rows={3}
-              ></CustomTextField>
-              <Button>
-                <IoMdSend />
-              </Button>
-            </TextFieldWrapper>
+          <Marker position={center} onClick={infoWindowHandler} />
+          {showInfoWindow && (
+            <InfoWindow position={center} onCloseClick={infoWindowHandler}>
+              <>
+                <InfoWindowName>{restaurant.name}</InfoWindowName>
+                <InfoWindowAddress>{restaurant.address}</InfoWindowAddress>
+              </>
+            </InfoWindow>
+          )}
+        </GoogleMap>
 
-            <Comment />
-          </Comments>
-        </RightWrapper>
-      </CustomContainer>
+        <CustomContainer>
+          <LeftWrapper>
+            <Info>
+              <NameWrapper>
+                <Name>{restaurant.name}</Name>
+                <Heart isClick={fav} onClick={() => setFav(!fav)} />
+              </NameWrapper>
+              <Address>{restaurant.address}</Address>
+              <RatingWrapper>
+                <Rating>{restaurant.rating}</Rating>
+                <FaStar />
+                <FaStar />
+                <FaStar />
+                <FaStar />
+                <FaStar />
+              </RatingWrapper>
+              <LocationWrapper>
+                <FaThumbtack />
+                <Location>{`${restaurant.latitude}, ${restaurant.longitude}`}</Location>
+              </LocationWrapper>
+            </Info>
+            <Chart
+              title="Waiting Time in the past 10 hours"
+              data={waitTimeData.ten_hour_wait}
+              labels={waitTimeLabel.ten_hour_wait}
+            />
+            <Chart
+              title="Waiting Time in this hour of past 7 days"
+              data={waitTimeData.seven_day_wait}
+              labels={waitTimeLabel.seven_day_wait}
+            />
+          </LeftWrapper>
+          <RightWrapper>
+            <Comments>
+              <CommentsTitle>Comments</CommentsTitle>
+              <TextFieldWrapper>
+                <CustomTextField
+                  multiline
+                  variant="filled"
+                  label="Enter your comment..."
+                  InputProps={{ disableUnderline: true }}
+                  rows={3}
+                ></CustomTextField>
+                <Button>
+                  <IoMdSend />
+                </Button>
+              </TextFieldWrapper>
+
+              <Comment />
+            </Comments>
+          </RightWrapper>
+        </CustomContainer>
+      </>
     </Wrapper>
   );
 };

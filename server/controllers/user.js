@@ -111,6 +111,17 @@ exports.user_info = (req, res, next) => {
     });
 };
 
+// API for getting all users info
+exports.all_user_info = (req, res, next) => {
+  User.find({})
+    .then((user) => {
+      res.status(200).json(user);
+    })
+    .catch((err) => {
+      res.status(500).end(err);
+    });
+};
+
 // API for updating user
 exports.user_update = (req, res, next) => {
   User.findById(req.body.userId)

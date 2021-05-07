@@ -288,11 +288,15 @@ exports.restaurant_delete = (req, res, next) => {
 
 //API for adding place to fav_place
 exports.add_fav = (req, res, next) => {
-  User.findByIdAndUpdate(req.userData.userId, {
-    $push: { fav_place: req.body.placeId },
-  })
+  let update = {};
+  if (req.body.isFav == true) {
+    update = { $push: { fav_place: req.body.placeId } };
+  } else {
+    update = { $pull: { fav_place: req.body.placeId } };
+  }
+  User.findByIdAndUpdate(req.userData.userId, update)
     .then(() => {
-      res.status(200).end("Added favourite place");
+      res.status(200).end("Changed favourite place");
     })
     .catch((err) => {
       res.status(500).json(err);

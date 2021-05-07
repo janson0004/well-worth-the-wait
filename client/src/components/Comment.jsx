@@ -1,12 +1,15 @@
 import React from "react";
 import styled from "styled-components/macro";
+import ReactTimeAgo from "react-time-ago";
 
 const Comment = ({ comment }) => {
   return (
     <Wrapper>
       <FlexWrapper>
         <Name>{comment.username}</Name>
-        <Timespan>5 mins ago</Timespan>
+        <Timespan>
+          <ReactTimeAgo date={comment.created_time} locale="en-US" />
+        </Timespan>
       </FlexWrapper>
       <Content>{comment.message}</Content>
     </Wrapper>
@@ -35,6 +38,9 @@ const Name = styled.span`
   margin-right: 16px;
 `;
 
-const Timespan = styled.span``;
+const Timespan = styled.span`
+  font-size: 14px;
+  color: ${({ theme }) => theme.mono.secondary};
+`;
 
 const Content = styled.span``;

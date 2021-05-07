@@ -45,6 +45,7 @@ const EditModal = ({ showModal, setShowModal, selectedPlace }) => {
       .catch((error) => {
         console.log(error);
       });
+    setShowModal(false);
   };
 
   return (

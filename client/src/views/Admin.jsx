@@ -12,6 +12,9 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
+
+import { disableBodyScroll, enableBodyScroll } from "body-scroll-lock";
+
 import { RestaurantsContext } from "../contexts/RestaurantsContext";
 
 const Admin = () => {
@@ -37,6 +40,14 @@ const Admin = () => {
         console.log("error");
       });
   }, []);
+
+  useEffect(() => {
+    if (showModal) {
+      disableBodyScroll(document.querySelector("#root"));
+    } else {
+      enableBodyScroll(document.querySelector("#root"));
+    }
+  }, [showModal]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -79,6 +90,7 @@ const Admin = () => {
         console.log(error);
       });
   };
+
   const createPlaceHandler = (e) => {
     e.preventDefault();
     createPlace();

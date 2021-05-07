@@ -1,32 +1,19 @@
 import React, { useState, useContext } from "react";
-import Navigation from "../components/Navigation";
 import styled from "styled-components/macro";
 import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import { TextField } from "@material-ui/core";
 import { AuthContext } from "../contexts/AuthContext";
-import { useHistory, Link } from "react-router-dom";
-import axios from "axios";
+import { useHistory } from "react-router-dom";
+import UserService from "../services/UserService";
 
 const Login = ({ setShowSidebar }) => {
-  const [usernames, setUsernames] = useState({
-    username: "",
-  });
-  const [passwords, setPasswords] = useState({
-    password: "",
-  });
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const { setAuth } = useContext(AuthContext);
   const history = useHistory();
-  const Login = (usernames, passwords) => {
-    axios
-      .post(
-        "/user/login",
-        { password: passwords, username: usernames },
-        {
-          withCredentials: true,
-        }
-      )
+  const Login = () => {
+    UserService.login({ username, password })
       .then((response) => {
         // If user successfully logged in, setAuth to save the user information and redirect to the home page
         setAuth(response.data);
@@ -41,9 +28,7 @@ const Login = ({ setShowSidebar }) => {
 
   const submitHandler = (e) => {
     e.preventDefault();
-    console.log(usernames.username);
-    console.log(passwords.password);
-    Login(usernames.username, passwords.password);
+    Login();
   };
   return (
     <Container>
@@ -59,9 +44,7 @@ const Login = ({ setShowSidebar }) => {
                 label="Username"
                 variant="filled"
                 InputProps={{ disableUnderline: true }}
-                onChange={(e) =>
-                  setUsernames({ ...usernames, username: e.target.value })
-                }
+                onChange={(e) => setUsername(e.target.value)}
               />
             </BlockDiv>
             <BlockDiv>
@@ -73,9 +56,7 @@ const Login = ({ setShowSidebar }) => {
                 autoComplete="current-password"
                 variant="filled"
                 InputProps={{ disableUnderline: true }}
-                onChange={(e) =>
-                  setPasswords({ ...passwords, password: e.target.value })
-                }
+                onChange={(e) => setPassword(e.target.value)}
               />
             </BlockDiv>
 
@@ -126,7 +107,6 @@ const LoginBar = styled.button`
   align-items: center;
   justify-content: center;
   font-size: 16px;
-  font-family: "Roboto";
   margin-top: 17px;
 `;
 

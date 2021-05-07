@@ -1,73 +1,73 @@
 import React, { useState, useContext, useEffect } from "react";
+import { Switch, Route } from "react-router-dom";
 import { ThemeProvider } from "styled-components/macro";
 import { COLOR, GlobalStyle, ResetStyle } from "./components/GlobalStyle";
-import Place from "./views/Place";
-import { Switch, Route } from "react-router-dom";
 import { AuthContext } from "./contexts/AuthContext";
-import axios from "axios";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+import UserService from "./services/UserService";
+import { RestaurantsContext } from "./contexts/RestaurantsContext";
+import RestaurantsService from "./services/RestaurantsService";
 import Login from "./views/Login";
+import Place from "./views/Place";
 import FavPlaces from "./views/FavPlaces";
 import Home from "./views/Home";
 import Loader from "./components/Loader";
 import Navigation from "./components/Navigation";
 
 function App() {
-  const { auth, setAuth, authLoading, setAuthLoading } = useContext(
-    AuthContext
-  );
+  const { auth, setAuth } = useContext(AuthContext);
+  const { setRestaurants } = useContext(RestaurantsContext);
   const [showSidebar, setShowSidebar] = useState(false);
+  const [loading, setLoading] = useState(true);
+
   useEffect(() => {
-    //axios.get used GET request to fetch user data from MongoDB
-    axios
-      .get("/user", { withCredentials: true })
+    // Get user data
+    UserService.getUser()
       .then((response) => {
         setAuth(response.data);
-        setAuthLoading(false);
         setShowSidebar(true);
+
+        // Get restaurants data
+        RestaurantsService.getAll()
+          .then((res) => {
+            setRestaurants(res.data);
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.log(error.response.data.message);
+            setLoading(false);
+          });
       })
       .catch((error) => {
-        setAuthLoading(false);
+        console.log(error.response.data.message);
+        setLoading(false);
       });
-  }, []);
+  }, [setAuth, setRestaurants]);
 
   return (
     <>
       <ThemeProvider theme={COLOR.light}>
         <ResetStyle />
         <GlobalStyle />
-
+        <Navigation showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
         <Switch>
-
-          </Route>
-          {!authLoading && auth && (
+          {!loading && auth && (
             <>
-              <Navigation
-                showSidebar={showSidebar}
-                setShowSidebar={setShowSidebar}
-                auth={auth}
-              />
-
               <Route exact path="/">
                 <Home />
               </Route>
-              <Route path="/place">
-            <Place />
-          </Route>
-              <Route exact path="/favplaces">
+              <Route path="/favplaces">
                 <FavPlaces />
+              </Route>
+              <Route path="/place/:id">
+                <Place />
               </Route>
             </>
           )}
-          {authLoading && <Loader />}
+          {loading && <Loader />}
           {!auth && (
-            <>
-              <Navigation />
-              <Route exact path="/">
-                <Login setShowSidebar={setShowSidebar} />
-              </Route>
-            </>
+            <Route exact path="/">
+              <Login setShowSidebar={setShowSidebar} />
+            </Route>
           )}
         </Switch>
       </ThemeProvider>

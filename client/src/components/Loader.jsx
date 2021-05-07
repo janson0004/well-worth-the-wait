@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import ClipLoader from "react-spinners/ClipLoader";
-import styled from "styled-components/macro";
+import styled, { ThemeContext } from "styled-components/macro";
 
 // Loader animation
 const Loader = () => {
+  const theme = useContext(ThemeContext);
+
   return (
-    <Wrapper data-testid="loaderComponent">
-      <ClipLoader color={({ theme }) => theme.theme.main} />
+    <Wrapper>
+      <ClipLoader color={theme.theme.main} />
     </Wrapper>
   );
 };

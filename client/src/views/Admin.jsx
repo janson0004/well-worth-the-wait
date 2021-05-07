@@ -3,12 +3,13 @@ import styled from "styled-components/macro";
 import Container from "@material-ui/core/Container";
 import AdminPlace from "../components/AdminPlace";
 import AdminService from "../services/AdminService";
+import Users from "../components/Users";
 import axios from "axios";
+
 import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { RestaurantsContext } from "../contexts/RestaurantsContext";
 
@@ -19,6 +20,18 @@ const Admin = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [placeId, setPlaceId] = useState("");
+  const [userInfo, setUserInfo] = useState("");
+  useEffect(() => {
+    axios
+      .get("/user/all", { withCredentials: true })
+      .then((response) => {
+        setUserInfo(response.data);
+        console.log(userInfo);
+      })
+      .catch((error) => {
+        console.log("error");
+      });
+  }, []);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -82,6 +95,11 @@ const Admin = () => {
           <Title>Users</Title>{" "}
           <Button onClick={handleClickOpen}>Create User</Button>
         </FlexDiv>
+        <Places>
+          {userInfo.map((user) => (
+            <Users key={user._id} user={user} />
+          ))}
+        </Places>
 
         <Dialog
           open={signUpOpen}

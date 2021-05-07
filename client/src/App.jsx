@@ -14,6 +14,7 @@ import NotFound from "./views/NotFound";
 import Loader from "./components/Loader";
 import Navigation from "./components/Navigation";
 import Admin from "./views/Admin";
+
 function App() {
   const history = useHistory();
   const { auth, setAuth } = useContext(AuthContext);

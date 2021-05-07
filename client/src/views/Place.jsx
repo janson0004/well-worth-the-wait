@@ -8,7 +8,7 @@ import {
   InfoWindow,
 } from "@react-google-maps/api";
 import Container from "@material-ui/core/Container";
-import { FaThumbtack, FaStar } from "react-icons/fa";
+import { FaThumbtack, FaStar, FaAirFreshener } from "react-icons/fa";
 import Heart from "../components/ReactAnimatedHeart";
 import Skeleton from "react-loading-skeleton";
 import Chart from "../components/Chart";
@@ -18,6 +18,7 @@ import TextField from "@material-ui/core/TextField";
 import { IoMdSend } from "react-icons/io";
 import { RestaurantsContext } from "../contexts/RestaurantsContext";
 import RestaurantService from "../services/RestaurantsService";
+import { AuthContext } from "../contexts/AuthContext";
 import NotFound from "./NotFound";
 
 const mapContainerStyle = {
@@ -44,6 +45,7 @@ const Place = () => {
   const [showInfoWindow, setshowInfoWindow] = useState(false);
   const [loading, setLoading] = useState(true);
   const [fav, setFav] = useState(false);
+  const { auth, setAuth } = useContext(AuthContext);
   const { restaurants, setRestaurants } = useContext(RestaurantsContext);
   const [restaurant, setRestaurant] = useState(null);
   const [waitTime, setWaitTime] = useState(null);
@@ -80,6 +82,7 @@ const Place = () => {
       return num;
     };
 
+    // Get current time and generate label
     let date = new Date();
     let hour = date.getHours();
     let labels = [];
@@ -87,6 +90,9 @@ const Place = () => {
       labels.push(`${zeroPad(timeRange(i), 2)}:00`);
     }
     setLabel({ ...Label, ten_hour: labels });
+
+    // Get if user have fav this place
+    setFav(auth.fav_place.find((place) => place.placeId === id));
   }, []);
 
   useEffect(() => {
@@ -128,6 +134,7 @@ const Place = () => {
       .catch((error) => {
         console.log(error.response.data);
       });
+    setAuth(auth.fav_place.filter((place) => place.placeId !== id));
   };
 
   if (loadError) return "";

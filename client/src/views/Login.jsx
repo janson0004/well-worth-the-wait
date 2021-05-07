@@ -2,6 +2,8 @@ import React, { useState, useContext } from "react";
 import styled from "styled-components/macro";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
+import Alert from "@material-ui/lab/Alert";
+import Snackbar from "@material-ui/core/Snackbar";
 import { TextField } from "@material-ui/core";
 import { AuthContext } from "../contexts/AuthContext";
 import { useHistory } from "react-router-dom";
@@ -10,6 +12,8 @@ import UserService from "../services/UserService";
 const Login = ({ setShowSidebar }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [showToast, setShowToast] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
   const { setAuth } = useContext(AuthContext);
   const history = useHistory();
   const Login = () => {
@@ -22,7 +26,9 @@ const Login = ({ setShowSidebar }) => {
       })
       .catch((error) => {
         //If the email / password is wrong, pop up an alert
-        alert("Login Failed. Try Again.");
+        setErrorMessage(error.response.data.message);
+        setShowToast(true);
+        // alert("Login Failed. Try Again.");
       });
   };
 
@@ -62,6 +68,15 @@ const Login = ({ setShowSidebar }) => {
 
             <LoginBar>Login</LoginBar>
           </LoginForm>
+          <Snackbar
+            open={showToast}
+            autoHideDuration={6000}
+            onClose={() => setShowToast(false)}
+          >
+            <Alert onClose={() => setShowToast(false)} severity="error">
+              {errorMessage}
+            </Alert>
+          </Snackbar>
         </CenterDiv>
       </Wrapper>
     </Container>

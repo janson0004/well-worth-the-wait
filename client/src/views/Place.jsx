@@ -49,20 +49,11 @@ const Place = () => {
   const [waitTime, setWaitTime] = useState(null);
   const [popularTime, setPopularTime] = useState(null);
   const [Label, setLabel] = useState({
-    ten_hour: [
-      "11:00",
-      "12:00",
-      "13:00",
-      "14:00",
-      "15:00",
-      "16:00",
-      "17:00",
-      "18:00",
-      "19:00",
-      "20:00",
-    ],
+    ten_hour: [],
     seven_day: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"],
   });
+
+  const [input, setInput] = useState("");
 
   useEffect(() => {
     const zeroPad = (num, size) => {
@@ -126,6 +117,32 @@ const Place = () => {
       .catch((error) => {
         console.log(error.response.data);
       });
+  };
+
+  const onEnterPressHandler = (e) => {
+    if (e.keyCode === 13 && e.shiftKey === false) {
+      e.preventDefault();
+      addCommentHandler();
+    }
+  };
+
+  const addCommentHandler = () => {
+    RestaurantService.addComment({ placeId: id, message: input })
+      .then((res) => {
+        setRestaurants(
+          restaurants.map((restaurant) => {
+            if (restaurant.placeId === id) {
+              restaurant.comment.push(res.data);
+            }
+            return restaurant;
+          })
+        );
+      })
+      .catch((error) => {
+        console.log(error.response.data);
+      });
+
+    setInput("");
   };
 
   if (loadError) return "";
@@ -239,13 +256,17 @@ const Place = () => {
                   label="Enter your comment..."
                   InputProps={{ disableUnderline: true }}
                   rows={3}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={onEnterPressHandler}
                 ></CustomTextField>
-                <Button>
+                <Button onClick={addCommentHandler}>
                   <IoMdSend />
                 </Button>
               </TextFieldWrapper>
-
-              <Comment />
+              {restaurant.comment.map((item) => (
+                <Comment key={item._id} comment={item} />
+              ))}
             </Comments>
           </RightWrapper>
         </CustomContainer>

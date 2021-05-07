@@ -9,12 +9,7 @@ const checkAdmin = require("../middleware/admin");
 router.post("/", checkAuth, checkAdmin, RestaurantController.restaurant_create);
 
 //post route for creating restaurant comment
-router.post(
-  "/comment",
-  checkAuth,
-  checkAdmin,
-  RestaurantController.restaurant_comment
-);
+router.post("/comment", checkAuth, RestaurantController.restaurant_comment);
 
 // get route for getting all restaurants
 router.get("/", RestaurantController.restaurant_all);
@@ -51,7 +46,8 @@ router.get("/test/:placeId", RestaurantController.restaurant_test);
 router.post("/fav", checkAuth, RestaurantController.add_fav);
 
 //refresh restaurant data
-router.put("/refresh/:placeId", 
+router.put(
+  "/refresh/:placeId",
   checkAuth,
   checkAdmin,
   RestaurantController.restaurant_refresh

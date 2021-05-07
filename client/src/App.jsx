@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, useHistory } from "react-router-dom";
 import { ThemeProvider } from "styled-components/macro";
 import { COLOR, GlobalStyle, ResetStyle } from "./components/GlobalStyle";
 import { AuthContext } from "./contexts/AuthContext";
@@ -15,6 +15,7 @@ import Loader from "./components/Loader";
 import Navigation from "./components/Navigation";
 
 function App() {
+  const history = useHistory();
   const { auth, setAuth } = useContext(AuthContext);
   const { setRestaurants } = useContext(RestaurantsContext);
   const [showSidebar, setShowSidebar] = useState(false);
@@ -29,7 +30,6 @@ function App() {
       .then((response) => {
         setAuth(response.data);
         setShowSidebar(true);
-        console.log(12);
 
         // Get restaurants data
         RestaurantsService.getAll()
@@ -45,8 +45,9 @@ function App() {
       .catch((error) => {
         console.log(error.response.data.message);
         setLoading(false);
+        history.push("/");
       });
-  }, [setAuth, setRestaurants]);
+  }, [setAuth, setRestaurants, history]);
 
   return (
     <>

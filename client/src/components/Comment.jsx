@@ -8,7 +8,7 @@ const Comment = ({ comment }) => {
       <FlexWrapper>
         <Name>{comment.username}</Name>
         <Timespan>
-          <ReactTimeAgo date={comment.created_time} locale="en-US" />
+          <ReactTimeAgo date={new Date(comment.created_time)} locale="en-US" />
         </Timespan>
       </FlexWrapper>
       <Content>{comment.message}</Content>

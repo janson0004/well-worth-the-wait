@@ -96,21 +96,23 @@ const Place = () => {
   }, [restaurants, id]);
 
   useEffect(() => {
-    RestaurantService.getWaitTime(id)
-      .then((res) => {
-        setWaitTime(res.data);
-        RestaurantService.getPopularTime(id)
-          .then((res) => {
-            setPopularTime(res.data);
-            setLoading(false);
-          })
-          .catch((error) => {
-            console.log("Error getting popular time");
-          });
-      })
-      .catch((error) => {
-        console.log("Error getting wait time");
-      });
+    if (restaurant) {
+      RestaurantService.getWaitTime(id)
+        .then((res) => {
+          setWaitTime(res.data);
+          RestaurantService.getPopularTime(id)
+            .then((res) => {
+              setPopularTime(res.data);
+              setLoading(false);
+            })
+            .catch((error) => {
+              console.log("Error getting popular time");
+            });
+        })
+        .catch((error) => {
+          console.log("Error getting wait time");
+        });
+    }
   }, [restaurant, id]);
 
   const infoWindowHandler = () => {

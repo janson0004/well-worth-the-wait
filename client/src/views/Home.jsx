@@ -1,21 +1,17 @@
 import React, { useState } from "react";
 import styled from "styled-components/macro";
-import {
-  GoogleMap,
-  useLoadScript,
-  Marker,
-  InfoWindow,
-} from "@react-google-maps/api";
+import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
+
 import Container from "@material-ui/core/Container";
-import { FaChevronDown, FaSearch } from "react-icons/fa";
-import { Button } from "@material-ui/core";
+import { FaChevronDown, FaSearch, FaChevronUp } from "react-icons/fa";
+
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
+
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
+
 import { makeStyles } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
@@ -56,6 +52,7 @@ const rows = [
 const Home = () => {
   const classes = useStyles();
   const [libraries] = useState(["places"]);
+  const { clicked, setClicked } = useState(false);
   const [center, setCenter] = useState({
     lat: 22.3061193,
     lng: 114.260494,
@@ -64,11 +61,13 @@ const Home = () => {
     googleMapsApiKey: process.env.REACT_APP_MAP_API_KEY,
     libraries,
   });
+
   if (loadError) return "Error loading maps";
   if (!isLoaded) return "Loading maps";
 
   return (
     <Wrapper>
+      {/* Google Map */}
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
         zoom={16}
@@ -94,6 +93,7 @@ const Home = () => {
                 <FaChevronDown />
               </ItemText>
             </ButtonDiv>
+
             <SearchDiv>
               <ItemText>
                 <ConstantFaSearch />
@@ -103,6 +103,7 @@ const Home = () => {
           </SearchRightDiv>
         </FlexDiv>
 
+        {/* Table */}
         <Table className={classes.table} aria-label="simple table">
           <TableHead>
             <TableRow>
@@ -194,4 +195,10 @@ const ConstantFaSearch = styled(FaSearch)`
 
 const CustomFaChevronDown = styled(FaChevronDown)`
   margin-left: 19px;
+  cursor: pointer;
+`;
+
+const CustomFaChevronUp = styled(FaChevronUp)`
+  margin-left: 19px;
+  cursor: pointer;
 `;

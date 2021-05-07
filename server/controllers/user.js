@@ -101,6 +101,7 @@ exports.user_logout = (req, res, next) => {
 // API for getting specific user info
 exports.user_info = (req, res, next) => {
   User.findById(req.userData.userId)
+    .populate("fav_place")
     .then((user) => {
       res.status(200).json(user);
     })

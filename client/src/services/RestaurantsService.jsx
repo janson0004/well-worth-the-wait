@@ -4,8 +4,13 @@ const RestaurantService = {
   getAll: () => {
     return axios.get("/restaurant", { withCredentials: true });
   },
-  getTime: (placeId) => {
-    return axios.get(`/restaurant/time/${placeId}`, { withCredentials: true });
+  getWaitTime: (placeId) => {
+    return axios.get(`/restaurant/wait/${placeId}`, { withCredentials: true });
+  },
+  getPopularTime: (placeId) => {
+    return axios.get(`/restaurant/popular/${placeId}`, {
+      withCredentials: true,
+    });
   },
   favPlace: (data) => {
     return axios.post("/restaurant/fav", data, { withCredentials: true });

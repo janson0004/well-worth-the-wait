@@ -45,8 +45,9 @@ const Place = () => {
   const { restaurants, setRestaurants } = useContext(RestaurantsContext);
   const [restaurant, setRestaurant] = useState(null);
   const [waitTime, setWaitTime] = useState(null);
-  const [waitTimeLabel, setWaitTimeLabel] = useState({
-    ten_hour_wait: [
+  const [popularTime, setPopularTime] = useState(null);
+  const [Label, setLabel] = useState({
+    ten_hour: [
       "11:00",
       "12:00",
       "13:00",
@@ -58,7 +59,7 @@ const Place = () => {
       "19:00",
       "20:00",
     ],
-    seven_day_wait: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"],
+    seven_day: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"],
   });
 
   useEffect(() => {
@@ -83,7 +84,7 @@ const Place = () => {
     for (let i = hour - 9; i <= hour; i++) {
       labels.push(`${zeroPad(timeRange(i), 2)}:00`);
     }
-    setWaitTimeLabel({ ...waitTimeLabel, ten_hour_wait: labels });
+    setLabel({ ...Label, ten_hour: labels });
   }, []);
 
   useEffect(() => {
@@ -91,13 +92,20 @@ const Place = () => {
   }, [restaurants, id]);
 
   useEffect(() => {
-    RestaurantService.getTime(id)
+    RestaurantService.getWaitTime(id)
       .then((res) => {
         setWaitTime(res.data);
-        setLoading(false);
+        RestaurantService.getPopularTime(id)
+          .then((res) => {
+            setPopularTime(res.data);
+            setLoading(false);
+          })
+          .catch((error) => {
+            console.log("Error getting popular time");
+          });
       })
       .catch((error) => {
-        setLoading(false);
+        console.log("Error getting wait time");
       });
   }, [restaurant, id]);
 
@@ -183,18 +191,32 @@ const Place = () => {
               <>
                 <Chart
                   title="Waiting Time in the past 10 hours"
-                  data={waitTime.ten_hour_wait}
-                  labels={waitTimeLabel.ten_hour_wait}
+                  data={waitTime.ten_hour}
+                  labels={Label.ten_hour}
                 />
                 <Chart
                   title="Waiting Time in this hour of past 7 days"
-                  data={waitTime.seven_day_wait}
-                  labels={waitTimeLabel.seven_day_wait}
+                  data={waitTime.seven_day}
+                  labels={Label.seven_day}
+                />
+                <Chart
+                  title="Popular Time in the past 10 hours"
+                  data={popularTime.ten_hour}
+                  labels={Label.ten_hour}
+                />
+                <Chart
+                  title="Popular Time in this hour of past 7 days"
+                  data={popularTime.seven_day}
+                  labels={Label.seven_day}
                 />
               </>
             )}
             {loading && (
               <>
+                <CustomSkeleton height={40} />
+                <CustomSkeleton height={400} />
+                <CustomSkeleton height={40} />
+                <CustomSkeleton height={400} />
                 <CustomSkeleton height={40} />
                 <CustomSkeleton height={400} />
                 <CustomSkeleton height={40} />

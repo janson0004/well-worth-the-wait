@@ -8,6 +8,7 @@ import { FaChevronDown, FaSearch } from "react-icons/fa";
 
 import { RestaurantsContext } from "../contexts/RestaurantsContext";
 
+import TableContainer from "@material-ui/core/TableContainer";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -106,63 +107,65 @@ const Home = () => {
         </FlexDiv>
 
         {/* Table */}
-        <Table className={classes.table} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                Name
-                <ItemText>
-                  <CustomFaChevronDown
-                    clicked={clicked}
-                    onClick={() => sortOnlickHandler(clicked)}
-                  />
-                </ItemText>
-              </TableCell>
-              <TableCell align="left">Adress</TableCell>
-              <TableCell align="left">Latitude, Longitude</TableCell>
-            </TableRow>
-          </TableHead>
-          {!clicked && (
-            <TableBody>
-              {toggleSort().map((row) => (
-                <CustomTableRow
-                  key={row.name}
-                  onClick={() => {
-                    history.push(`/place/${row.placeId}`);
-                  }}
-                >
-                  <TableCell component="th" scope="row">
-                    {row.name}
-                  </TableCell>
-                  <TableCell align="left">{row.address}</TableCell>
-                  <TableCell align="left">
-                    {row.latitude}, {row.longitude}
-                  </TableCell>
-                </CustomTableRow>
-              ))}
-            </TableBody>
-          )}
-          {clicked && (
-            <TableBody>
-              {reverseSort().map((row) => (
-                <CustomTableRow
-                  key={row.name}
-                  onClick={() => {
-                    history.push(`/place/${row.placeId}`);
-                  }}
-                >
-                  <TableCell component="th" scope="row">
-                    {row.name}
-                  </TableCell>
-                  <TableCell align="left">{row.address}</TableCell>
-                  <TableCell align="left">
-                    {row.latitude}, {row.longitude}
-                  </TableCell>
-                </CustomTableRow>
-              ))}
-            </TableBody>
-          )}
-        </Table>
+        <TableContainer>
+          <Table className={classes.table} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>
+                  Name
+                  <ItemText>
+                    <CustomFaChevronDown
+                      clicked={clicked}
+                      onClick={() => sortOnlickHandler(clicked)}
+                    />
+                  </ItemText>
+                </TableCell>
+                <TableCell align="left">Adress</TableCell>
+                <TableCell align="left">Latitude, Longitude</TableCell>
+              </TableRow>
+            </TableHead>
+            {!clicked && (
+              <TableBody>
+                {toggleSort().map((row) => (
+                  <CustomTableRow
+                    key={row.name}
+                    onClick={() => {
+                      history.push(`/place/${row.placeId}`);
+                    }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {row.name}
+                    </TableCell>
+                    <TableCell align="left">{row.address}</TableCell>
+                    <TableCell align="left">
+                      {row.latitude}, {row.longitude}
+                    </TableCell>
+                  </CustomTableRow>
+                ))}
+              </TableBody>
+            )}
+            {clicked && (
+              <TableBody>
+                {reverseSort().map((row) => (
+                  <CustomTableRow
+                    key={row.name}
+                    onClick={() => {
+                      history.push(`/place/${row.placeId}`);
+                    }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {row.name}
+                    </TableCell>
+                    <TableCell align="left">{row.address}</TableCell>
+                    <TableCell align="left">
+                      {row.latitude}, {row.longitude}
+                    </TableCell>
+                  </CustomTableRow>
+                ))}
+              </TableBody>
+            )}
+          </Table>
+        </TableContainer>
       </CustomContainer>
     </Wrapper>
   );

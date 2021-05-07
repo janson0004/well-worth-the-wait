@@ -46,7 +46,7 @@ const Place = () => {
   const [loading, setLoading] = useState(true);
   const [fav, setFav] = useState(false);
   const { auth, setAuth } = useContext(AuthContext);
-  const { restaurants } = useContext(RestaurantsContext);
+  const { restaurants, setRestaurants } = useContext(RestaurantsContext);
   const [restaurant, setRestaurant] = useState(null);
   const [waitTime, setWaitTime] = useState(null);
   const [popularTime, setPopularTime] = useState(null);

@@ -83,7 +83,8 @@ const Place = () => {
     setLabel({ ...Label, ten_hour: labels });
 
     // Get if user have fav this place
-    setFav(auth.fav_place.find((place) => place.placeId === id));
+
+    setFav(auth.fav_place.find((place) => place.placeId === id) ? true : false);
   }, []);
 
   useEffect(() => {
@@ -117,15 +118,21 @@ const Place = () => {
   };
 
   const favPlaceHandler = () => {
-    setFav(!fav);
     RestaurantService.favPlace({ placeId: restaurant._id, isFav: fav })
       .then((res) => {
-        console.log(res.data);
+        if (fav) {
+          setAuth({
+            ...auth,
+            fav_place: auth.fav_place.filter((place) => place.placeId !== id),
+          });
+        } else {
+          setAuth({ ...auth, fav_place: [...auth.fav_place, restaurant] });
+        }
+        setFav(!fav);
       })
       .catch((error) => {
         console.log(error.response.data);
       });
-    setAuth(auth.fav_place.filter((place) => place.placeId !== id));
   };
 
   const onEnterPressHandler = (e) => {

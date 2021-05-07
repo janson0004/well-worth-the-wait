@@ -289,7 +289,7 @@ exports.restaurant_delete = (req, res, next) => {
 //API for adding place to fav_place
 exports.add_fav = (req, res, next) => {
   let update = {};
-  if (req.body.isFav == true) {
+  if (req.body.isFav == false) {
     update = { $push: { fav_place: req.body.placeId } };
   } else {
     update = { $pull: { fav_place: req.body.placeId } };

@@ -18,6 +18,8 @@ import TextField from "@material-ui/core/TextField";
 import { IoMdSend } from "react-icons/io";
 import { RestaurantsContext } from "../contexts/RestaurantsContext";
 import RestaurantService from "../services/RestaurantsService";
+import { useParams } from "react-router-dom";
+import NotFound from "./NotFound";
 
 const mapContainerStyle = {
   width: "100%",
@@ -38,6 +40,7 @@ const Place = () => {
     googleMapsApiKey: process.env.REACT_APP_MAP_API_KEY,
     libraries,
   });
+  const [match, setMatch] = useState(true);
 
   const [showInfoWindow, setshowInfoWindow] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -88,7 +91,9 @@ const Place = () => {
   }, []);
 
   useEffect(() => {
-    setRestaurant(restaurants.find((restaurant) => restaurant.placeId === id));
+    const result = restaurants.find((restaurant) => restaurant.placeId === id);
+    if (result) setRestaurant(result);
+    else setMatch(false);
   }, [restaurants, id]);
 
   useEffect(() => {
@@ -126,6 +131,7 @@ const Place = () => {
 
   if (loadError) return "";
   if (!isLoaded) return "";
+  if (!match) return <NotFound />;
   return (
     <Wrapper>
       <>

@@ -10,6 +10,7 @@ import Login from "./views/Login";
 import Place from "./views/Place";
 import FavPlaces from "./views/FavPlaces";
 import Home from "./views/Home";
+import NotFound from "./views/NotFound";
 import Loader from "./components/Loader";
 import Navigation from "./components/Navigation";
 
@@ -60,6 +61,9 @@ function App() {
               </Route>
               <Route path="/place/:id">
                 <Place />
+              </Route>
+              <Route path="/">
+                <NotFound />
               </Route>
             </>
           )}

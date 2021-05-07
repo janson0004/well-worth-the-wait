@@ -16,6 +16,7 @@ import TextField from "@material-ui/core/TextField";
 import { IoMdSend } from "react-icons/io";
 import { RestaurantsContext } from "../contexts/RestaurantsContext";
 import { useParams } from "react-router-dom";
+import NotFound from "./NotFound";
 
 const mapContainerStyle = {
   width: "100%",
@@ -60,6 +61,8 @@ const waitTimeLabel = {
 // };
 
 const Place = () => {
+  const { id } = useParams();
+
   const [libraries] = useState(["places"]);
   const [center, setCenter] = useState({
     lat: 22.3061193,
@@ -69,16 +72,18 @@ const Place = () => {
     googleMapsApiKey: process.env.REACT_APP_MAP_API_KEY,
     libraries,
   });
+  const [match, setMatch] = useState(true);
 
   const [showInfoWindow, setshowInfoWindow] = useState(false);
   const { restaurants, setRestaurants } = useContext(RestaurantsContext);
   const [restaurant, setRestaurant] = useState(null);
 
   const [fav, setFav] = useState(false);
-  const { id } = useParams();
 
   useEffect(() => {
-    setRestaurant(restaurants.find((restaurant) => restaurant.placeId === id));
+    const result = restaurants.find((restaurant) => restaurant.placeId === id);
+    if (result) setRestaurant(result);
+    else setMatch(false);
   }, [restaurants, id]);
 
   const infoWindowHandler = () => {
@@ -87,6 +92,7 @@ const Place = () => {
 
   if (loadError) return "";
   if (!isLoaded) return "";
+  if (!match) return <NotFound />;
   return (
     <Wrapper>
       <>

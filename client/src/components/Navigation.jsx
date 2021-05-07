@@ -3,6 +3,7 @@ import styled from "styled-components/macro";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
 import { FaHeart, FaChevronDown, FaSignOutAlt } from "react-icons/fa";
+import { RiAdminFill } from "react-icons/ri";
 import { AuthContext } from "../contexts/AuthContext";
 import { Link, useHistory } from "react-router-dom";
 import UserService from "../services/UserService";
@@ -46,9 +47,16 @@ const Navigation = ({ showSidebar, setShowSidebar }) => {
         </NavItem>
         {showSidebar && (
           <FlexDiv>
-            <NavItem to="/favplace">
-              <FaHeart />
-            </NavItem>
+            {auth.role === "Admin" ? (
+              <NavItem to="/admin">
+                <RiAdminFill />
+              </NavItem>
+            ) : (
+              <NavItem to="/favplace">
+                <FaHeart />
+              </NavItem>
+            )}
+
             <DropDownItem>
               <DropDown onClick={dropDownHandler}>
                 <Name>{auth ? auth.username : ""}</Name>
@@ -81,6 +89,7 @@ const Wrapper = styled(Navbar)`
   .navbar-brand {
     display: flex;
     align-items: center;
+    cursor: pointer;
   }
 
   .navbar-toggler {

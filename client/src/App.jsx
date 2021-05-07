@@ -13,6 +13,7 @@ import Home from "./views/Home";
 import NotFound from "./views/NotFound";
 import Loader from "./components/Loader";
 import Navigation from "./components/Navigation";
+import Admin from "./views/Admin";
 
 function App() {
   const history = useHistory();
@@ -66,6 +67,11 @@ function App() {
             <Route path="/place/:id">
               <Place />
             </Route>
+            {auth.role === "Admin" && (
+              <Route path="/admin">
+                <Admin />
+              </Route>
+            )}
             <Route>
               <NotFound />
             </Route>

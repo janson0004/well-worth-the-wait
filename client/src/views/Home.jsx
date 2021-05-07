@@ -15,6 +15,7 @@ import { MdSearch } from "react-icons/md";
 
 import { RestaurantsContext } from "../contexts/RestaurantsContext";
 
+import TableContainer from "@material-ui/core/TableContainer";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -26,6 +27,8 @@ import TextField from "@material-ui/core/TextField";
 import MenuItem from "@material-ui/core/MenuItem";
 
 import { makeStyles } from "@material-ui/core/styles";
+
+import { MEDIA_BREAK } from "../components/GlobalStyle";
 
 const useStyles = makeStyles({
   table: {
@@ -93,9 +96,17 @@ const Home = () => {
 
   const filterSearch = (item) => {
     if (searchInput) {
-      let result = item[searchBy]
-        .toLowerCase()
-        .includes(searchInput.toLowerCase());
+      let result;
+      if (searchBy === "coordinates") {
+        result = (item["latitude"] + ", " + item["longitude"])
+          .toString()
+          .includes(searchInput.toLowerCase());
+      } else {
+        result = item[searchBy]
+          .toString()
+          .toLowerCase()
+          .includes(searchInput.toLowerCase());
+      }
       if (result) {
         console.log(item);
       }
@@ -202,43 +213,45 @@ const Home = () => {
         </FlexDiv>
 
         {/* Table */}
-        <Table className={classes.table} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell>
-                Name
-                <ItemText>
-                  <CustomFaChevronDown
-                    reverse={reverse ? 1 : 0}
-                    onClick={sortOnlickHandler}
-                  />
-                </ItemText>
-              </TableCell>
-              <TableCell align="left">Address</TableCell>
-              <TableCell align="left">Latitude, Longitude</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {sorting()
-              .filter(filterSearch)
-              .map((row) => (
-                <CustomTableRow
-                  key={row.name}
-                  onClick={() => {
-                    history.push(`/place/${row.placeId}`);
-                  }}
-                >
-                  <TableCell component="th" scope="row">
-                    {row.name}
-                  </TableCell>
-                  <TableCell align="left">{row.address}</TableCell>
-                  <TableCell align="left">
-                    {row.latitude}, {row.longitude}
-                  </TableCell>
-                </CustomTableRow>
-              ))}
-          </TableBody>
-        </Table>
+        <TableContainer>
+          <Table className={classes.table} aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>
+                  Name
+                  <ItemText>
+                    <CustomFaChevronDown
+                      reverse={reverse ? 1 : 0}
+                      onClick={sortOnlickHandler}
+                    />
+                  </ItemText>
+                </TableCell>
+                <TableCell align="left">Address</TableCell>
+                <TableCell align="left">Latitude, Longitude</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {sorting()
+                .filter(filterSearch)
+                .map((row) => (
+                  <CustomTableRow
+                    key={row.name}
+                    onClick={() => {
+                      history.push(`/place/${row.placeId}`);
+                    }}
+                  >
+                    <TableCell component="th" scope="row">
+                      {row.name}
+                    </TableCell>
+                    <TableCell align="left">{row.address}</TableCell>
+                    <TableCell align="left">
+                      {row.latitude}, {row.longitude}
+                    </TableCell>
+                  </CustomTableRow>
+                ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
       </CustomContainer>
     </Wrapper>
   );
@@ -260,6 +273,10 @@ const FlexDiv = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-top: 60px;
+
+  @media (max-width: ${MEDIA_BREAK.lg}) {
+    display: block;
+  }
 `;
 
 const Title = styled.div`
@@ -319,6 +336,10 @@ const CustomTableRow = styled(TableRow)`
 
 const SearchWrapper = styled.div`
   display: flex;
+
+  @media (max-width: ${MEDIA_BREAK.lg}) {
+    margin-top: 20px;
+  }
 
   .MuiFormControl-root.MuiTextField-root {
     width: 100%;

@@ -165,9 +165,9 @@ exports.restaurant_create = (req, res, next) => {
         restaurant
           .save()
           .then((result) => {
-            res.status(201).json({
-              message: "Restaurant created",
-            });
+            res
+              .status(201)
+              .json({ restaurant: restaurant, message: "Restaurant created" });
           })
           .catch((err) => {
             res.status(500).json({
@@ -330,6 +330,7 @@ exports.restaurant_refresh = (req, res, next) => {
     )
       .then((result) => {
         res.status(201).json({
+          result: result,
           message: "Restaurant data refreshed",
         });
       })

@@ -145,7 +145,7 @@ const Place = () => {
   const addCommentHandler = () => {
     RestaurantService.addComment({ placeId: id, message: input })
       .then((res) => {
-        setRestaurants(
+        setRestaurant(
           restaurants.map((restaurant) => {
             if (restaurant.placeId === id) {
               restaurant.comment.push(res.data);
@@ -279,7 +279,7 @@ const Place = () => {
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={onEnterPressHandler}
-                ></CustomTextField>
+                />
                 <Button onClick={addCommentHandler}>
                   <IoMdSend />
                 </Button>

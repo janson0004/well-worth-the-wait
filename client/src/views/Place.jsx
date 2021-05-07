@@ -8,7 +8,7 @@ import {
   InfoWindow,
 } from "@react-google-maps/api";
 import Container from "@material-ui/core/Container";
-import { FaThumbtack, FaStar, FaAirFreshener } from "react-icons/fa";
+import { FaThumbtack, FaStar } from "react-icons/fa";
 import Heart from "../components/ReactAnimatedHeart";
 import Skeleton from "react-loading-skeleton";
 import Chart from "../components/Chart";
@@ -46,7 +46,7 @@ const Place = () => {
   const [loading, setLoading] = useState(true);
   const [fav, setFav] = useState(false);
   const { auth, setAuth } = useContext(AuthContext);
-  const { restaurants, setRestaurants } = useContext(RestaurantsContext);
+  const { restaurants } = useContext(RestaurantsContext);
   const [restaurant, setRestaurant] = useState(null);
   const [waitTime, setWaitTime] = useState(null);
   const [popularTime, setPopularTime] = useState(null);
@@ -127,7 +127,7 @@ const Place = () => {
 
   const favPlaceHandler = () => {
     setFav(!fav);
-    RestaurantService.favPlace({ placeId: restaurant._id })
+    RestaurantService.favPlace({ placeId: restaurant._id, isFav: fav })
       .then((res) => {
         console.log(res.data);
       })

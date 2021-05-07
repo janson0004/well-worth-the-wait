@@ -2,17 +2,17 @@ import React, { useContext } from "react";
 import styled from "styled-components/macro";
 import Container from "@material-ui/core/Container";
 import FavPlace from "../components/FavPlace";
-import { RestaurantsContext } from "../contexts/RestaurantsContext";
+import { AuthContext } from "../contexts/AuthContext";
 
 const FavPlaces = () => {
-  const { restaurants } = useContext(RestaurantsContext);
+  const { auth } = useContext(AuthContext);
 
   return (
     <Wrapper>
       <CustomContainer>
         <Title>Favourite Places</Title>
         <Places>
-          {restaurants.map((restaurant) => (
+          {auth.fav_place.map((restaurant) => (
             <FavPlace key={restaurant.placeId} restaurant={restaurant} />
           ))}
         </Places>

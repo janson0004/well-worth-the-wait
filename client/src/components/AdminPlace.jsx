@@ -1,13 +1,18 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components/macro";
 import AdminService from "../services/AdminService";
 import { IoMdRefresh } from "react-icons/io";
-
+import { RestaurantsContext } from "../contexts/RestaurantsContext";
 const AdminPlace = ({ restaurant, setShowModal, setSelectedPlace }) => {
+  const { restaurants, setRestaurants } = useContext(RestaurantsContext);
+
   const onClickDelete = (placeId) => {
     AdminService.deletePlace(placeId)
       .then((res) => {
-        alert("Deteled successfully");
+        setRestaurants(
+          restaurants.filter((restaurant) => restaurant.plcaeId !== placeId)
+        );
+        alert("Deleted successfully");
       })
       .catch((error) => {
         console.log(error.response.data.message);

@@ -71,7 +71,8 @@ const Admin = () => {
       .post("/user/signup", { username, password }, { withCredentials: true })
       .then((response) => {
         handleClose();
-        console.log("created");
+        setUserInfo([...userInfo, response.data.user]);
+        console.log(response.data.message);
       })
       .catch((error) => {
         console.log(error);
@@ -87,6 +88,7 @@ const Admin = () => {
     AdminService.createPlace({ placeId })
       .then((response) => {
         handleSignUpClose();
+        setRestaurants([...restaurants, response.data.restaurant]);
         console.log("created a new place");
       })
       .catch((error) => {
@@ -141,6 +143,8 @@ const Admin = () => {
                     user={user}
                     setShowModal={setShowModal2}
                     setSelectedUser={setSelectedUser}
+                    userInfo={userInfo}
+                    setUserInfo={setUserInfo}
                   />
                 ))
               : ""}

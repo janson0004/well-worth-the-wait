@@ -13,6 +13,7 @@ const restaurantSchema = Schema({
   placeId: {type: String, requried: true},
   name: { type: String, required: true, unique: true },
   rating: { type: Number, required: true },
+  address: {type: String, required: true },
   latitude: { type: Number, required: true },
   longitude: { type: Number, required: true },
   comment: [commentSchema],

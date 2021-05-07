@@ -51,30 +51,28 @@ function App() {
         <ResetStyle />
         <GlobalStyle />
         <Navigation showSidebar={showSidebar} setShowSidebar={setShowSidebar} />
-        <Switch>
-          {!loading && auth && (
-            <>
-              <Route exact path="/">
-                <Home />
-              </Route>
-              <Route path="/favplace">
-                <FavPlaces />
-              </Route>
-              <Route path="/place/:id">
-                <Place />
-              </Route>
-              <Route path="/">
-                <NotFound />
-              </Route>
-            </>
-          )}
-          {loading && <Loader />}
-          {!auth && (
+        {!loading && auth && (
+          <Switch>
             <Route exact path="/">
-              <Login setShowSidebar={setShowSidebar} />
+              <Home />
             </Route>
-          )}
-        </Switch>
+            <Route path="/favplace">
+              <FavPlaces />
+            </Route>
+            <Route path="/place/:id">
+              <Place />
+            </Route>
+            <Route>
+              <NotFound />
+            </Route>
+          </Switch>
+        )}
+        {loading && <Loader />}
+        {!auth && (
+          <Route exact path="/">
+            <Login setShowSidebar={setShowSidebar} />
+          </Route>
+        )}
       </ThemeProvider>
     </>
   );

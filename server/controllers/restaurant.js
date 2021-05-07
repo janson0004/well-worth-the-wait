@@ -249,12 +249,14 @@ exports.restaurant_one = (req, res, next) => {
 exports.restaurant_update = (req, res, next) => {
   Restaurant.findOneAndUpdate(
     { placeId: req.params["placeId"] },
-    { $set: { name: req.body["name"], 
-              rating: req.body["rating"],
-              address: req.body["address"],
-              latitude: req.body["latitude"],
-              longitude: req.body["longitude"]
-             } 
+    {
+      $set: {
+        name: req.body["name"],
+        rating: req.body["rating"],
+        address: req.body["address"],
+        latitude: req.body["latitude"],
+        longitude: req.body["longitude"],
+      },
     }
   )
     .then((result) => {
@@ -301,14 +303,14 @@ exports.add_fav = (req, res, next) => {
 
 exports.restaurant_refresh = (req, res, next) => {
   let dataset = [];
-      const python = spawn("python3", [
-        "populartimes_api.py",
-        req.params["placeId"],
-      ]);
+  const python = spawn("python3", [
+    "populartimes_api.py",
+    req.params["placeId"],
+  ]);
 
-      python.stdout.on("data", (data) => {
-        dataset.push(data);
-      });
+  python.stdout.on("data", (data) => {
+    dataset.push(data);
+  });
 
   python.on("close", (code) => {
     dataset = JSON.parse(dataset.join(""));
@@ -321,7 +323,7 @@ exports.restaurant_refresh = (req, res, next) => {
           address: dataset.address,
           latitude: dataset.coordinates.lat,
           longitude: dataset.coordinates.lng,
-        }
+        },
       }
     )
       .then((result) => {
@@ -335,5 +337,5 @@ exports.restaurant_refresh = (req, res, next) => {
           message: "Database error",
         });
       });
-      })
-}
+  });
+};

@@ -47,10 +47,4 @@ router.get("/test/:placeId", RestaurantController.restaurant_test);
 //add fav place
 router.post("/fav", checkAuth, RestaurantController.add_fav);
 
-router.put("/refresh/:placeId", 
-  checkAuth,
-  checkAdmin,
-  RestaurantController.restaurant_refresh
-);
-
 module.exports = router;

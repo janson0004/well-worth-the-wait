@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components/macro";
 import AdminService from "../services/AdminService";
 
-const Users = ({ user }) => {
+const Users = ({ user, setShowModal, setSelectedUser }) => {
   const onClickDelete = (userId) => {
     AdminService.deletePlace(userId)
       .then((res) => {
@@ -12,11 +12,17 @@ const Users = ({ user }) => {
         console.log(error.response.data.message);
       });
   };
+
+  const editHandler = () => {
+    setShowModal((prev) => !prev);
+    setSelectedUser(user);
+  };
+
   return (
     <Wrapper>
       <Name>{user.username}</Name>
       <FlexDiv>
-        <Button>Edit</Button>
+        <Button onClick={editHandler}>Edit</Button>
         <DeleteButton onClick={() => onClickDelete(user._id)}>
           Delete
         </DeleteButton>

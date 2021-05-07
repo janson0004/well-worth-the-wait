@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components/macro";
-import Overlay from "../components/Overlay";
+import Overlay from "./Overlay";
 import TextField from "@material-ui/core/TextField";
 import AdminService from "../services/AdminService";
 import { RestaurantsContext } from "../contexts/RestaurantsContext";
 
-const EditModal = ({ showModal, setShowModal, selectedPlace }) => {
+const EditPlaceModal = ({ showModal, setShowModal, selectedPlace }) => {
   const [nameInput, setNameInput] = useState("");
   const [addressInput, setAddressInput] = useState("");
   const [ratingInput, setRatingInput] = useState("");
@@ -105,7 +105,7 @@ const EditModal = ({ showModal, setShowModal, selectedPlace }) => {
   );
 };
 
-export default EditModal;
+export default EditPlaceModal;
 
 const Wrapper = styled.div`
   position: absolute;
@@ -136,31 +136,6 @@ const Title = styled.span`
   font-weight: 600;
   margin-bottom: 30px;
   color: ${({ theme }) => theme.mono.primary};
-`;
-
-const Label = styled.span`
-  display: block;
-  font-size: 16px;
-  font-weight: 500;
-  margin-bottom: 6px;
-  color: ${({ theme }) => theme.font.primary};
-`;
-
-const Input = styled.input`
-  padding: 8px 12px;
-  background-color: ${({ theme }) => theme.bg.shade};
-  border: none;
-  outline: none;
-  border-radius: 8px;
-  color: ${({ theme }) => theme.font.primary};
-  font-size: 14px;
-  font-weight: 500;
-  width: 100%;
-  margin-bottom: 16px;
-
-  &::placeholder {
-    color: ${({ theme }) => theme.font.secondary};
-  }
 `;
 
 const Button = styled.button`

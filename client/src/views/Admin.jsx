@@ -4,7 +4,8 @@ import Container from "@material-ui/core/Container";
 import AdminPlace from "../components/AdminPlace";
 import AdminService from "../services/AdminService";
 import Users from "../components/Users";
-import EditModal from "../components/EditModal";
+import EditPlaceModal from "../components/EditPlaceModal";
+import EditUserModal from "../components/EditUserModal";
 import axios from "axios";
 
 import TextField from "@material-ui/core/TextField";
@@ -27,7 +28,9 @@ const Admin = () => {
   const [userInfo, setUserInfo] = useState("");
 
   const [showModal, setShowModal] = useState(false);
+  const [showModal2, setShowModal2] = useState(false);
   const [selectedPlace, setSelectedPlace] = useState("");
+  const [selectedUser, setSelectedUser] = useState("");
 
   useEffect(() => {
     axios
@@ -41,13 +44,13 @@ const Admin = () => {
       });
   }, []);
 
-  useEffect(() => {
-    if (showModal) {
-      disableBodyScroll(document.querySelector("#root"));
-    } else {
-      enableBodyScroll(document.querySelector("#root"));
-    }
-  }, [showModal]);
+  // useEffect(() => {
+  //   if (showModal || showModal2) {
+  //     disableBodyScroll(document.querySelector("body"));
+  //   } else {
+  //     enableBodyScroll(document.querySelector("body"));
+  //   }
+  // }, [showModal, showModal2]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -98,10 +101,17 @@ const Admin = () => {
 
   return (
     <>
-      <EditModal
+      <EditPlaceModal
         showModal={showModal}
         setShowModal={setShowModal}
         selectedPlace={selectedPlace}
+      />
+      <EditUserModal
+        showModal={showModal2}
+        setShowModal={setShowModal2}
+        selectedUser={selectedUser}
+        userInfo={userInfo}
+        setUserInfo={setUserInfo}
       />
       <Wrapper>
         <CustomContainer>
@@ -125,7 +135,14 @@ const Admin = () => {
           </UserFlexDiv>
           <Places>
             {userInfo
-              ? userInfo.map((user) => <Users key={user._id} user={user} />)
+              ? userInfo.map((user) => (
+                  <Users
+                    key={user._id}
+                    user={user}
+                    setShowModal={setShowModal2}
+                    setSelectedUser={setSelectedUser}
+                  />
+                ))
               : ""}
           </Places>
 

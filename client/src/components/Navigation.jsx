@@ -36,11 +36,14 @@ const Navigation = ({ showSidebar, setShowSidebar }) => {
     Logout();
   };
 
+  const IconOnClick = () => {
+    history.push("/");
+  };
   return (
     <Wrapper>
       <CustomNavbar expand="lg">
         <CustomContainer>
-          <Navbar.Brand>
+          <Navbar.Brand onClick={IconOnClick}>
             <Brand>Restaurants</Brand>
           </Navbar.Brand>
           {showSidebar && (
@@ -88,6 +91,7 @@ const CustomNavbar = styled(Navbar)`
   .navbar-brand {
     display: flex;
     align-items: center;
+    cursor: pointer;
   }
 
   .navbar-toggler {

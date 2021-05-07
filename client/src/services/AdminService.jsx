@@ -10,6 +10,9 @@ const AdminService = {
   deleteUser: () => {
     return axios.delete("/user", { withCredentials: true });
   },
+  getAll: () => {
+    return axios.get("/user/all", { withCredentials: true });
+  },
 };
 
 export default AdminService;

@@ -1,9 +1,10 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext } from "react";
 import styled from "styled-components/macro";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
+import { useHistory } from "react-router-dom";
 
 import Container from "@material-ui/core/Container";
-import { FaChevronDown, FaSearch, FaChevronUp } from "react-icons/fa";
+import { FaChevronDown, FaSearch } from "react-icons/fa";
 
 import { RestaurantsContext } from "../contexts/RestaurantsContext";
 
@@ -34,19 +35,19 @@ const options = {
 const Home = () => {
   const classes = useStyles();
   const [libraries] = useState(["places"]);
+  const history = useHistory();
   const { restaurants, setRestaurants } = useContext(RestaurantsContext);
   const [clicked, setClicked] = useState(false);
-  const { ascending, setAscending } = useContext(RestaurantsContext);
+
   const [center, setCenter] = useState({
-    lat: 22.3061193,
-    lng: 114.260494,
+    lat: 22.310993034714123,
+    lng: 114.24018913494935,
   });
   const { isLoaded, loadError } = useLoadScript({
     googleMapsApiKey: process.env.REACT_APP_MAP_API_KEY,
     libraries,
   });
 
-  console.log(restaurants);
   const toggleSort = () => {
     const ordered = restaurants;
     ordered.sort((a, b) => a.name.localeCompare(b.name));
@@ -66,23 +67,23 @@ const Home = () => {
   const sortOnlickHandler = (clicked) => {
     setClicked(!clicked);
   };
+
   return (
     <Wrapper>
       {/* Google Map */}
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
-        zoom={16}
+        zoom={15}
         center={center}
         options={options}
       >
-        {/* Marker props
-        icon={{
-          url: "/assets/img", 
-          scaledSize: new window.google.maps.Size(30, 30), 
-          origin: new window.google.maps.Point(0, 0), 
-          anchor: new window.google.map.Point(15, 15)
-        }} */}
-        <Marker position={center} />
+        {restaurants.map((marker) => (
+          <Marker
+            key={marker.name}
+            position={{ lat: marker.latitude, lng: marker.longitude }}
+            onClick={() => history.push(`/place/${marker.placeId}`)}
+          />
+        ))}
       </GoogleMap>
       <CustomContainer>
         <FlexDiv>
@@ -112,6 +113,7 @@ const Home = () => {
                 Name
                 <ItemText>
                   <CustomFaChevronDown
+                    clicked={clicked}
                     onClick={() => sortOnlickHandler(clicked)}
                   />
                 </ItemText>
@@ -123,7 +125,12 @@ const Home = () => {
           {!clicked && (
             <TableBody>
               {toggleSort().map((row) => (
-                <TableRow key={row.name}>
+                <CustomTableRow
+                  key={row.name}
+                  onClick={() => {
+                    history.push(`/place/${row.placeId}`);
+                  }}
+                >
                   <TableCell component="th" scope="row">
                     {row.name}
                   </TableCell>
@@ -131,14 +138,19 @@ const Home = () => {
                   <TableCell align="left">
                     {row.latitude}, {row.longitude}
                   </TableCell>
-                </TableRow>
+                </CustomTableRow>
               ))}
             </TableBody>
           )}
           {clicked && (
             <TableBody>
               {reverseSort().map((row) => (
-                <TableRow key={row.name}>
+                <CustomTableRow
+                  key={row.name}
+                  onClick={() => {
+                    history.push(`/place/${row.placeId}`);
+                  }}
+                >
                   <TableCell component="th" scope="row">
                     {row.name}
                   </TableCell>
@@ -146,7 +158,7 @@ const Home = () => {
                   <TableCell align="left">
                     {row.latitude}, {row.longitude}
                   </TableCell>
-                </TableRow>
+                </CustomTableRow>
               ))}
             </TableBody>
           )}
@@ -219,9 +231,10 @@ const ConstantFaSearch = styled(FaSearch)`
 const CustomFaChevronDown = styled(FaChevronDown)`
   margin-left: 19px;
   cursor: pointer;
+  transform: ${(props) => (props.clicked ? "rotate(180deg)" : "rotate(0)")};
+  transition: transform 0.4s;
 `;
 
-const CustomFaChevronUp = styled(FaChevronUp)`
-  margin-left: 19px;
+const CustomTableRow = styled(TableRow)`
   cursor: pointer;
 `;

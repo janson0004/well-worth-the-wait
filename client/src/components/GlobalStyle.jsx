@@ -48,6 +48,7 @@ export const COLOR = {
     },
     theme: {
       main: "#7D68FF",
+      shaded: "#6049f3",
     },
   },
 };

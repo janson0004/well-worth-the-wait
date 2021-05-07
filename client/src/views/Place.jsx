@@ -18,6 +18,7 @@ import TextField from "@material-ui/core/TextField";
 import { IoMdSend } from "react-icons/io";
 import { RestaurantsContext } from "../contexts/RestaurantsContext";
 import RestaurantService from "../services/RestaurantsService";
+import { AuthContext } from "../contexts/AuthContext";
 import NotFound from "./NotFound";
 
 const mapContainerStyle = {
@@ -44,7 +45,8 @@ const Place = () => {
   const [showInfoWindow, setshowInfoWindow] = useState(false);
   const [loading, setLoading] = useState(true);
   const [fav, setFav] = useState(false);
-  const { restaurants, setRestaurants } = useContext(RestaurantsContext);
+  const { auth, setAuth } = useContext(AuthContext);
+  const { restaurants } = useContext(RestaurantsContext);
   const [restaurant, setRestaurant] = useState(null);
   const [waitTime, setWaitTime] = useState(null);
   const [popularTime, setPopularTime] = useState(null);
@@ -71,6 +73,7 @@ const Place = () => {
       return num;
     };
 
+    // Get current time and generate label
     let date = new Date();
     let hour = date.getHours();
     let labels = [];
@@ -78,6 +81,9 @@ const Place = () => {
       labels.push(`${zeroPad(timeRange(i), 2)}:00`);
     }
     setLabel({ ...Label, ten_hour: labels });
+
+    // Get if user have fav this place
+    setFav(auth.fav_place.find((place) => place.placeId === id));
   }, []);
 
   useEffect(() => {
@@ -112,13 +118,14 @@ const Place = () => {
 
   const favPlaceHandler = () => {
     setFav(!fav);
-    RestaurantService.favPlace({ placeId: restaurant._id })
+    RestaurantService.favPlace({ placeId: restaurant._id, isFav: fav })
       .then((res) => {
         console.log(res.data);
       })
       .catch((error) => {
         console.log(error.response.data);
       });
+    setAuth(auth.fav_place.filter((place) => place.placeId !== id));
   };
 
   const onEnterPressHandler = (e) => {

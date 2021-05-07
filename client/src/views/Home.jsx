@@ -23,7 +23,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 
 import TextField from "@material-ui/core/TextField";
-import InputAdornment from "@material-ui/core/InputAdornment";
+import MenuItem from "@material-ui/core/MenuItem";
 
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -46,9 +46,10 @@ const Home = () => {
   const classes = useStyles();
   const [libraries] = useState(["places"]);
   const history = useHistory();
-  const { restaurants, setRestaurants } = useContext(RestaurantsContext);
+  const { restaurants } = useContext(RestaurantsContext);
   const [reverse, setReverse] = useState(false);
   const [searchInput, setSearchInput] = useState("");
+  const [searchBy, setSearchBy] = useState("name");
 
   const googleMap = useRef();
   const onMapLoad = useCallback((map) => {
@@ -92,7 +93,7 @@ const Home = () => {
 
   const filterSearch = (item) => {
     if (searchInput) {
-      let result = item["name"]
+      let result = item[searchBy]
         .toLowerCase()
         .includes(searchInput.toLowerCase());
       if (result) {
@@ -108,7 +109,7 @@ const Home = () => {
   };
 
   useEffect(() => {
-    if (googleMap.current) {
+    try {
       let searchResult = restaurants.filter(filterSearch);
       if (searchResult.length === 1) {
         panTo(
@@ -130,6 +131,8 @@ const Home = () => {
 
       console.log(searchResult);
       console.log(center);
+    } catch (error) {
+      console.log(error);
     }
   }, [searchInput]);
 
@@ -159,6 +162,19 @@ const Home = () => {
         <FlexDiv>
           <Title>Places</Title>
           <SearchWrapper>
+            <TextField
+              select
+              value={searchBy}
+              variant="filled"
+              onChange={(e) => {
+                setSearchBy(e.target.value);
+              }}
+              InputProps={{ disableUnderline: true }}
+            >
+              <MenuItem value={"name"}>Name</MenuItem>
+              <MenuItem value={"address"}>Address</MenuItem>
+              <MenuItem value={"coordinates"}>Coordinates</MenuItem>
+            </TextField>
             <SearchField>
               <MdSearch />
               <SearchInput
@@ -198,7 +214,7 @@ const Home = () => {
                   />
                 </ItemText>
               </TableCell>
-              <TableCell align="left">Adress</TableCell>
+              <TableCell align="left">Address</TableCell>
               <TableCell align="left">Latitude, Longitude</TableCell>
             </TableRow>
           </TableHead>
@@ -301,7 +317,23 @@ const CustomTableRow = styled(TableRow)`
   cursor: pointer;
 `;
 
-const SearchWrapper = styled.div``;
+const SearchWrapper = styled.div`
+  display: flex;
+
+  .MuiFormControl-root.MuiTextField-root {
+    width: 100%;
+  }
+
+  .MuiSelect-root.MuiSelect-select.MuiSelect-selectMenu.MuiSelect-filled.MuiInputBase-input.MuiFilledInput-input {
+    padding: 10px 12px 10px;
+    padding-right: 32px;
+  }
+
+  .MuiInputBase-root.MuiFilledInput-root.MuiInputBase-formControl {
+    background-color: ${({ theme }) => theme.bg.shaded};
+    border-radius: 12px;
+  }
+`;
 
 const SearchField = styled.div`
   display: flex;
@@ -314,6 +346,7 @@ const SearchField = styled.div`
   border-radius: 12px;
   outline: none;
   font-size: 16px;
+  margin-left: 21px;
 
   svg {
     color: ${({ theme }) => theme.mono.secondary};

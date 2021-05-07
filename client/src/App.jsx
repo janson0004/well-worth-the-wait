@@ -1,8 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Switch, Route } from "react-router-dom";
+import { Switch, Route, useHistory } from "react-router-dom";
 import { ThemeProvider } from "styled-components/macro";
-import TimeAgo from "javascript-time-ago";
-import en from "javascript-time-ago/locale/en";
 import { COLOR, GlobalStyle, ResetStyle } from "./components/GlobalStyle";
 import { AuthContext } from "./contexts/AuthContext";
 import UserService from "./services/UserService";
@@ -17,14 +15,13 @@ import Loader from "./components/Loader";
 import Navigation from "./components/Navigation";
 import Admin from "./views/Admin";
 function App() {
+  const history = useHistory();
   const { auth, setAuth } = useContext(AuthContext);
   const { setRestaurants } = useContext(RestaurantsContext);
   const [showSidebar, setShowSidebar] = useState(false);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    TimeAgo.addDefaultLocale(en);
-  }, []);
+  useEffect(() => {}, []);
 
   // Initiallize/ fetching data
   useEffect(() => {
@@ -48,8 +45,9 @@ function App() {
       .catch((error) => {
         console.log(error.response.data.message);
         setLoading(false);
+        history.push("/");
       });
-  }, [setAuth, setRestaurants]);
+  }, [setAuth, setRestaurants, history]);
 
   return (
     <>

@@ -232,7 +232,7 @@ const CustomFaChevronDown = styled(FaChevronDown)`
   margin-left: 19px;
   cursor: pointer;
   transform: ${(props) => (props.clicked ? "rotate(180deg)" : "rotate(0)")};
-  transition: transform 0.4s;
+  transition: transform 200ms cubic-bezier(0.87, 0, 0.11, 1.4);
 `;
 
 const CustomTableRow = styled(TableRow)`

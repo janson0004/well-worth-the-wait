@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import styled from "styled-components/macro";
 import { GoogleMap, useLoadScript, Marker } from "@react-google-maps/api";
 
 import Container from "@material-ui/core/Container";
 import { FaChevronDown, FaSearch, FaChevronUp } from "react-icons/fa";
+
+import { RestaurantsContext } from "../contexts/RestaurantsContext";
 
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -28,31 +30,13 @@ const options = {
   disableDefaultUI: true,
   zoomControl: true,
 };
-function createData(name, adress, latitude) {
-  return { name, adress, latitude };
-}
-const rows = [
-  createData(
-    "KFC Whampoa Garden",
-    "Shop B3, Treasure World, Site 11, Whampoa Garden, Hung Hom, Hong Kong",
-    "22.12111, 29.11284"
-  ),
-  createData(
-    "KFC Whampoa Garden",
-    "Shop B3, Treasure World, Site 11, Whampoa Garden, Hung Hom, Hong Kong",
-    "22.12111, 29.11284"
-  ),
-  createData(
-    "KFC Whampoa Garden",
-    "Shop B3, Treasure World, Site 11, Whampoa Garden, Hung Hom, Hong Kong",
-    "22.12111, 29.11284"
-  ),
-];
 
 const Home = () => {
   const classes = useStyles();
   const [libraries] = useState(["places"]);
-  const { clicked, setClicked } = useState(false);
+  const { restaurants, setRestaurants } = useContext(RestaurantsContext);
+  const [clicked, setClicked] = useState(false);
+  const { ascending, setAscending } = useContext(RestaurantsContext);
   const [center, setCenter] = useState({
     lat: 22.3061193,
     lng: 114.260494,
@@ -62,9 +46,26 @@ const Home = () => {
     libraries,
   });
 
+  console.log(restaurants);
+  const toggleSort = () => {
+    const ordered = restaurants;
+    ordered.sort((a, b) => a.name.localeCompare(b.name));
+    return ordered;
+  };
+
+  const reverseSort = () => {
+    const ordered = restaurants;
+    ordered.sort((b, a) => a.name.localeCompare(b.name));
+    return ordered;
+  };
+  console.log(reverseSort());
+
   if (loadError) return "Error loading maps";
   if (!isLoaded) return "Loading maps";
 
+  const sortOnlickHandler = (clicked) => {
+    setClicked(!clicked);
+  };
   return (
     <Wrapper>
       {/* Google Map */}
@@ -110,24 +111,45 @@ const Home = () => {
               <TableCell>
                 Name
                 <ItemText>
-                  <CustomFaChevronDown />
+                  <CustomFaChevronDown
+                    onClick={() => sortOnlickHandler(clicked)}
+                  />
                 </ItemText>
               </TableCell>
               <TableCell align="left">Adress</TableCell>
-              <TableCell align="left">Latitude,Longitude</TableCell>
+              <TableCell align="left">Latitude, Longitude</TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.name}>
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
-                <TableCell align="left">{row.adress}</TableCell>
-                <TableCell align="left">{row.latitude}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
+          {!clicked && (
+            <TableBody>
+              {toggleSort().map((row) => (
+                <TableRow key={row.name}>
+                  <TableCell component="th" scope="row">
+                    {row.name}
+                  </TableCell>
+                  <TableCell align="left">{row.address}</TableCell>
+                  <TableCell align="left">
+                    {row.latitude}, {row.longitude}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          )}
+          {clicked && (
+            <TableBody>
+              {reverseSort().map((row) => (
+                <TableRow key={row.name}>
+                  <TableCell component="th" scope="row">
+                    {row.name}
+                  </TableCell>
+                  <TableCell align="left">{row.address}</TableCell>
+                  <TableCell align="left">
+                    {row.latitude}, {row.longitude}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          )}
         </Table>
       </CustomContainer>
     </Wrapper>
@@ -135,6 +157,7 @@ const Home = () => {
 };
 
 export default Home;
+
 const Wrapper = styled.div``;
 
 const CustomContainer = styled(Container)`

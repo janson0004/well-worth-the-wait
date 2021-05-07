@@ -40,8 +40,8 @@ exports.restaurant_wait = (req, res, next) => {
     let d = date.getDay() || 7 - 1;
     let h = date.getHours();
     let time_wait = [];
-    let ten_hour_wait = [];
-    let seven_day_wait = [];
+    let ten_hour = [];
+    let seven_day = [];
     let index = 24 * (d - 1) + h;
 
     dataset = dataset.time_wait;
@@ -57,22 +57,22 @@ exports.restaurant_wait = (req, res, next) => {
 
     if (d == 0 && h < 9) {
       for (let i = 159 + h; i <= 167; i++) {
-        ten_hour_wait.push(time_wait[i]);
+        ten_hour.push(time_wait[i]);
       }
       for (let j = 0; j <= h; j++) {
-        ten_hour_wait.push(time_wait[j]);
+        ten_hour.push(time_wait[j]);
       }
     } else {
       for (let i = index - 9; i <= index; i++) {
-        ten_hour_wait.push(time_wait[i]);
+        ten_hour.push(time_wait[i]);
       }
     }
 
     for (let i = h; i <= 144 + h; i += 24) {
-      seven_day_wait.push(time_wait[i]);
+      seven_day.push(time_wait[i]);
     }
 
-    res.json({ ten_hour_wait, seven_day_wait });
+    res.json({ ten_hour, seven_day });
   });
 };
 
@@ -95,8 +95,8 @@ exports.restaurant_popular = (req, res, next) => {
     let d = date.getDay() || 7 - 1;
     let h = date.getHours();
     let populartimes = [];
-    let ten_hour_popular = [];
-    let seven_day_popular = [];
+    let ten_hour = [];
+    let seven_day = [];
     let index = 24 * (d - 1) + h;
 
     dataset = dataset.populartimes;
@@ -112,22 +112,22 @@ exports.restaurant_popular = (req, res, next) => {
 
     if (d == 0 && h < 9) {
       for (let i = 159 + h; i <= 167; i++) {
-        ten_hour_popular.push(populartimes[i]);
+        ten_hour.push(populartimes[i]);
       }
       for (let j = 0; j <= h; j++) {
-        ten_hour_popular.push(populartimes[j]);
+        ten_hour.push(populartimes[j]);
       }
     } else {
       for (let i = index - 9; i <= index; i++) {
-        ten_hour_popular.push(populartimes[i]);
+        ten_hour.push(populartimes[i]);
       }
     }
 
     for (let i = h; i <= 144 + h; i += 24) {
-      seven_day_popular.push(populartimes[i]);
+      seven_day.push(populartimes[i]);
     }
 
-    res.json({ ten_hour_popular, seven_day_popular });
+    res.json({ ten_hour, seven_day });
   });
 };
 

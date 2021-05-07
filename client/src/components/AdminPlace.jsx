@@ -10,7 +10,7 @@ const AdminPlace = ({ restaurant, setShowModal, setSelectedPlace }) => {
     AdminService.deletePlace(placeId)
       .then((res) => {
         setRestaurants(
-          restaurants.filter((restaurant) => restaurant.plcaeId !== placeId)
+          restaurants.filter((restaurant) => restaurant.placeId !== placeId)
         );
         alert("Deleted successfully");
       })
@@ -21,6 +21,15 @@ const AdminPlace = ({ restaurant, setShowModal, setSelectedPlace }) => {
   const onClickRefresh = (placeId) => {
     AdminService.refreshPlace(placeId)
       .then((res) => {
+        console.log(res.data.result);
+        setRestaurants(
+          restaurants.map((restaurant) => {
+            if (restaurant.placeId === placeId) {
+              return res.data.result;
+            }
+            return restaurant;
+          })
+        );
         console.log("refreshed");
       })
       .catch((error) => {

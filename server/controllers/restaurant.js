@@ -330,6 +330,7 @@ exports.restaurant_refresh = (req, res, next) => {
     )
       .then((result) => {
         res.status(201).json({
+          result: result,
           message: "Restaurant data refreshed",
         });
       })

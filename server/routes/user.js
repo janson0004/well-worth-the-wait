@@ -14,6 +14,9 @@ router.post("/login", UserController.user_login);
 // get route for get user info
 router.get("/", checkAuth, UserController.user_info);
 
+// get all users info
+router.get("/all", checkAuth, checkAdmin, UserController.all_user_info);
+
 //update user info, admin required
 router.put("/", checkAuth, checkAdmin, UserController.user_update);
 

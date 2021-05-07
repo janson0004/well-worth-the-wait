@@ -28,6 +28,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 
 import { makeStyles } from "@material-ui/core/styles";
 
+import { MEDIA_BREAK } from "../components/GlobalStyle";
+
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
@@ -271,6 +273,10 @@ const FlexDiv = styled.div`
   align-items: center;
   justify-content: space-between;
   margin-top: 60px;
+
+  @media (max-width: ${MEDIA_BREAK.lg}) {
+    display: block;
+  }
 `;
 
 const Title = styled.div`
@@ -330,6 +336,10 @@ const CustomTableRow = styled(TableRow)`
 
 const SearchWrapper = styled.div`
   display: flex;
+
+  @media (max-width: ${MEDIA_BREAK.lg}) {
+    margin-top: 20px;
+  }
 
   .MuiFormControl-root.MuiTextField-root {
     width: 100%;

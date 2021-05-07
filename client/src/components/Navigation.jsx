@@ -127,6 +127,7 @@ const DropDownItem = styled.div`
 const DropDown = styled.div`
   display: flex;
   align-items: center;
+  cursor: pointer;
 `;
 
 const Name = styled.span`
@@ -140,7 +141,6 @@ const CustomFaChevronDown = styled(FaChevronDown)`
   width: 16px;
   height: 21px;
   margin-left: 12px;
-  cursor: pointer;
 `;
 
 const DownWrapper = styled.div`

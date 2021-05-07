@@ -37,7 +37,7 @@ const Home = () => {
   const [libraries] = useState(["places"]);
   const history = useHistory();
   const { restaurants, setRestaurants } = useContext(RestaurantsContext);
-  const [clicked, setClicked] = useState(false);
+  const [reverse, setReverse] = useState(false);
 
   const [center, setCenter] = useState({
     lat: 22.310993034714123,
@@ -59,14 +59,21 @@ const Home = () => {
     ordered.sort((b, a) => a.name.localeCompare(b.name));
     return ordered;
   };
-  console.log(reverseSort());
+
+  const sorting = () => {
+    if (reverse) {
+      return reverseSort();
+    } else {
+      return toggleSort();
+    }
+  };
+
+  const sortOnlickHandler = () => {
+    setReverse(!reverse);
+  };
 
   if (loadError) return "Error loading maps";
   if (!isLoaded) return "Loading maps";
-
-  const sortOnlickHandler = (clicked) => {
-    setClicked(!clicked);
-  };
 
   return (
     <Wrapper>
@@ -113,8 +120,8 @@ const Home = () => {
                 Name
                 <ItemText>
                   <CustomFaChevronDown
-                    clicked={clicked ? 1 : 0}
-                    onClick={() => sortOnlickHandler(clicked)}
+                    reverse={reverse ? 1 : 0}
+                    onClick={sortOnlickHandler}
                   />
                 </ItemText>
               </TableCell>
@@ -122,46 +129,24 @@ const Home = () => {
               <TableCell align="left">Latitude, Longitude</TableCell>
             </TableRow>
           </TableHead>
-          {!clicked && (
-            <TableBody>
-              {toggleSort().map((row) => (
-                <CustomTableRow
-                  key={row.name}
-                  onClick={() => {
-                    history.push(`/place/${row.placeId}`);
-                  }}
-                >
-                  <TableCell component="th" scope="row">
-                    {row.name}
-                  </TableCell>
-                  <TableCell align="left">{row.address}</TableCell>
-                  <TableCell align="left">
-                    {row.latitude}, {row.longitude}
-                  </TableCell>
-                </CustomTableRow>
-              ))}
-            </TableBody>
-          )}
-          {clicked && (
-            <TableBody>
-              {reverseSort().map((row) => (
-                <CustomTableRow
-                  key={row.name}
-                  onClick={() => {
-                    history.push(`/place/${row.placeId}`);
-                  }}
-                >
-                  <TableCell component="th" scope="row">
-                    {row.name}
-                  </TableCell>
-                  <TableCell align="left">{row.address}</TableCell>
-                  <TableCell align="left">
-                    {row.latitude}, {row.longitude}
-                  </TableCell>
-                </CustomTableRow>
-              ))}
-            </TableBody>
-          )}
+          <TableBody>
+            {sorting().map((row) => (
+              <CustomTableRow
+                key={row.name}
+                onClick={() => {
+                  history.push(`/place/${row.placeId}`);
+                }}
+              >
+                <TableCell component="th" scope="row">
+                  {row.name}
+                </TableCell>
+                <TableCell align="left">{row.address}</TableCell>
+                <TableCell align="left">
+                  {row.latitude}, {row.longitude}
+                </TableCell>
+              </CustomTableRow>
+            ))}
+          </TableBody>
         </Table>
       </CustomContainer>
     </Wrapper>
@@ -231,7 +216,7 @@ const ConstantFaSearch = styled(FaSearch)`
 const CustomFaChevronDown = styled(FaChevronDown)`
   margin-left: 19px;
   cursor: pointer;
-  transform: ${(props) => (props.clicked ? "rotate(180deg)" : "rotate(0)")};
+  transform: ${(props) => (props.reverse ? "rotate(180deg)" : "rotate(0)")};
   transition: transform 200ms cubic-bezier(0.87, 0, 0.11, 1.4);
 `;
 

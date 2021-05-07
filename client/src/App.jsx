@@ -13,7 +13,7 @@ import Home from "./views/Home";
 import NotFound from "./views/NotFound";
 import Loader from "./components/Loader";
 import Navigation from "./components/Navigation";
-
+import Admin from "./views/Admin";
 function App() {
   const { auth, setAuth } = useContext(AuthContext);
   const { setRestaurants } = useContext(RestaurantsContext);
@@ -66,6 +66,11 @@ function App() {
               <Route path="/">
                 <NotFound />
               </Route>
+              {auth.role === "Admin" && (
+                <Route path="/admin">
+                  <Admin />
+                </Route>
+              )}
             </>
           )}
           {loading && <Loader />}

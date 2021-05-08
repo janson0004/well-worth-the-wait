@@ -52,7 +52,7 @@ const Place = () => {
   const [popularTime, setPopularTime] = useState(null);
   const [Label, setLabel] = useState({
     ten_hour: [],
-    seven_day: ["SUN", "MON", "TUE", "WED", "THU", "FRI", "SAT"],
+    seven_day: ["MON", "TUE", "WED", "THU", "FRI", "SAT", "SUN"],
   });
 
   const [input, setInput] = useState("");

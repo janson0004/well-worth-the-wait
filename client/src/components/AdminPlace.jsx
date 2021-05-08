@@ -21,10 +21,11 @@ const AdminPlace = ({ restaurant, setShowModal, setSelectedPlace }) => {
   const onClickRefresh = (placeId) => {
     AdminService.refreshPlace(placeId)
       .then((res) => {
-        console.log(res.data.result);
         setRestaurants(
           restaurants.map((restaurant) => {
             if (restaurant.placeId === placeId) {
+              console.log(restaurant);
+              console.log(res.data.result);
               return res.data.result;
             }
             return restaurant;

@@ -326,7 +326,8 @@ exports.restaurant_refresh = (req, res, next) => {
           latitude: dataset.coordinates.lat,
           longitude: dataset.coordinates.lng,
         },
-      }
+      },
+      { new: true }
     )
       .then((result) => {
         res.status(201).json({

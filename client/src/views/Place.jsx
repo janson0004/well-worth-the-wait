@@ -131,7 +131,7 @@ const Place = () => {
         setFav(!fav);
       })
       .catch((error) => {
-        console.log(error.response.data);
+        console.log(error);
       });
   };
 
@@ -145,7 +145,7 @@ const Place = () => {
   const addCommentHandler = () => {
     RestaurantService.addComment({ placeId: id, message: input })
       .then((res) => {
-        setRestaurant(
+        setRestaurants(
           restaurants.map((restaurant) => {
             if (restaurant.placeId === id) {
               restaurant.comment.push(res.data);
@@ -155,7 +155,7 @@ const Place = () => {
         );
       })
       .catch((error) => {
-        console.log(error.response.data);
+        console.log(error);
       });
 
     setInput("");

@@ -2,43 +2,46 @@ const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+const { replaceOne } = require("../models/user");
 
 // API for signing up, requires username and password in body
 exports.user_signup = (req, res, next) => {
-  User.findOne({ username: req.body.username }).then((exist) => {
-    if (exist != null) {
-      return res.status(409).json({
-        message: "Duplicate Email",
-      });
-    } else {
-      bcrypt.hash(req.body.password, 10, (err, hash) => {
-        if (err) {
-          return res.status(500).json({
-            error: err,
-            message: "Hashing failed",
-          });
-        } else {
-          const user = new User({
-            _id: new mongoose.Types.ObjectId(),
-            role: "User",
-            username: req.body.username,
-            password: hash,
-          });
-          user
-            .save()
-            .then((result) => {
-              res.status(201).json({ user: user, message: "User created" });
-            })
-            .catch((err) => {
-              res.status(500).json({
-                error: err,
-                message: "Database error",
-              });
+  if (req.body.password.length <= 20 && req.body.password.length >= 4) {
+    User.findOne({ username: req.body.username }).then((exist) => {
+      if (exist != null) {
+        return res.status(409).json({
+          message: "Duplicate Email",
+        });
+      } else {
+        bcrypt.hash(req.body.password, 10, (err, hash) => {
+          if (err) {
+            return res.status(500).json({
+              error: err,
+              message: "Hashing failed",
             });
-        }
-      });
-    }
-  });
+          } else {
+            const user = new User({
+              _id: new mongoose.Types.ObjectId(),
+              role: "User",
+              username: req.body.username,
+              password: hash,
+            });
+            user
+              .save()
+              .then((result) => {
+                res.status(201).json({ user: user, message: "User created" });
+              })
+              .catch((err) => {
+                res.status(500).json({
+                  error: err,
+                  message: "Database error",
+                });
+              });
+          }
+        });
+      }
+    });
+  } else return res.status(400).end("Password's length invalid");
 };
 
 // API for user login, requires username and password in body
@@ -123,12 +126,15 @@ exports.all_user_info = (req, res, next) => {
 
 // API for updating user
 exports.user_update = (req, res, next) => {
-  User.findById(req.body.userId)
-    .then((user) => {
-      if (req.body.username != null) {
+  User.findById(req.body.userId).then((user) => {
+    if (req.body.username != null) {
+      if (req.body.username.length <= 20 && req.body.username.length >= 4) {
         user.username = req.body.username;
-      }
-      if (req.body.password != null) {
+      } else return res.status(400).end("Username's length invalid");
+    }
+
+    if (req.body.password != null) {
+      if (req.body.password.length <= 20 && req.body.password.length >= 4) {
         bcrypt.hash(req.body.password, 10, (err, hash) => {
           if (err) {
             return res.status(500).json({
@@ -136,18 +142,20 @@ exports.user_update = (req, res, next) => {
               message: "Hashing failed",
             });
           } else {
-            user.password = hash
+            user.password = hash;
           }
-
-          user.save().then(() => {
-            res.status(200).end("User updated");
-          })
-          .catch((err) => {
-            res.status(500).end(err);
-          });
-        })
-      }
-    })
+        });
+      } else return res.status(400).end("Password's length invalid");
+    }
+    user
+      .save()
+      .then(() => {
+        res.status(200).end("User updated");
+      })
+      .catch((err) => {
+        res.status(500).end(err);
+      });
+  });
 };
 
 exports.user_delete = (req, res, next) => {

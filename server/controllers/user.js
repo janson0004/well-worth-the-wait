@@ -152,8 +152,9 @@ exports.user_update = (req, res, next) => {
 };
 
 exports.user_delete = (req, res, next) => {
-  User.findByIdAndDelete(req.body.userId)
+  User.findByIdAndDelete(req.params["userId"])
     .then(() => {
+      console.log(req.params["userId"]);
       res.status(200).end("User deleted");
     })
     .catch((err) => {

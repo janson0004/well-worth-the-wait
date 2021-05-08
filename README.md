@@ -1,6 +1,8 @@
 # Well Worth the Wait
 
-## Run it locally (Not in VM)
+## Run it locally
+
+There are production/ development mode, which can be define within .env
 
 ```
 git clone https://github.com/janson0004/well-worth-the-wait.git
@@ -15,18 +17,18 @@ cd client
 npm install
 ```
 
-Start the client side
-
-```
-npm start
-```
-
 #### Environment variable
 
 Create a .env.local file under the client folder, and set the environment variable:
 
 ```
 REACT_APP_MAP_API_KEY=your_google_api_key
+```
+
+Start the client side
+
+```
+npm start
 ```
 
 ### server
@@ -38,10 +40,16 @@ cd server
 npm install
 ```
 
-Start the server side
+#### Environment variable
+
+Create a .env file under the server folder, and set the environment variable:
 
 ```
-npm start
+PORT=3001
+MONGO_URL=your_own_mongodb_uri
+NODE_ENV=development
+JTW_TOKEN=your_token
+API_KEY=your_google_api_key
 ```
 
 #### Setup virtual environment for python
@@ -76,14 +84,25 @@ cd populartimes
 pip3 install .
 ```
 
-#### Environment variable
-
-Create a .env file under the server folder, and set the environment variable:
+Start the server side
 
 ```
-PORT=3001
-MONGO_URL=your_own_mongodb_uri
-NODE_ENV=development
-JTW_TOKEN=your_token
-API_KEY=your_google_api_key
+npm start
 ```
+
+### Install all packages and build (production mode)
+
+On the root folder, run these command
+
+```
+npm run build
+npm start
+```
+
+## Remarks
+
+Server need to be run in python virtual environment for the env variables.
+
+With NODE_ENV=development, client and server will run in different port (3000, 3001)
+
+With NODE_ENV=production, server will serve the built-client with single port (2109)

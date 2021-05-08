@@ -129,15 +129,25 @@ exports.user_update = (req, res, next) => {
         user.username = req.body.username;
       }
       if (req.body.password != null) {
-        user.password = req.body.password;
+        bcrypt.hash(req.body.password, 10, (err, hash) => {
+          if (err) {
+            return res.status(500).json({
+              error: err,
+              message: "Hashing failed",
+            });
+          } else {
+            user.password = hash
+          }
+
+          user.save().then(() => {
+            res.status(200).end("User updated");
+          })
+          .catch((err) => {
+            res.status(500).end(err);
+          });
+        })
       }
-      user.save().then(() => {
-        res.status(200).end("User updated");
-      });
     })
-    .catch((err) => {
-      res.status(500).end(err);
-    });
 };
 
 exports.user_delete = (req, res, next) => {

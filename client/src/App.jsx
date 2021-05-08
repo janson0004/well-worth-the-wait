@@ -26,27 +26,27 @@ function App() {
 
   // Initiallize/ fetching data
   useEffect(() => {
-    // Get user data
-    UserService.getUser()
-      .then((response) => {
-        setAuth(response.data);
-        setShowSidebar(true);
+    // Get restaurants data
+    RestaurantsService.getAll()
+      .then((res) => {
+        setRestaurants(res.data);
 
-        // Get restaurants data
-        RestaurantsService.getAll()
-          .then((res) => {
-            setRestaurants(res.data);
+        // Get user data
+        UserService.getUser()
+          .then((response) => {
+            setAuth(response.data);
+            setShowSidebar(true);
             setLoading(false);
           })
           .catch((error) => {
             console.log(error);
             setLoading(false);
+            history.push("/");
           });
       })
       .catch((error) => {
         console.log(error);
         setLoading(false);
-        history.push("/");
       });
   }, [setAuth, setRestaurants, history]);
 

@@ -130,7 +130,8 @@ exports.user_update = (req, res, next) => {
     if (req.body.username != "") {
       if (req.body.username.length <= 20 && req.body.username.length >= 4) {
         user.username = req.body.username;
-      } else return res.status(400).end("Username's length invalid");
+      } else
+        return res.status(400).json({ message: "Username's length invalid" });
     }
 
     if (req.body.password != "") {
@@ -145,7 +146,8 @@ exports.user_update = (req, res, next) => {
             user.password = hash;
           }
         });
-      } else return res.status(400).end("Password's length invalid");
+      } else
+        return res.status(400).json({ message: "Password's length invalid" });
     }
     user
       .save()

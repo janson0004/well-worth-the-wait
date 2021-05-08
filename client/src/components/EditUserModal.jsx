@@ -40,7 +40,7 @@ const EditUserModal = ({
         );
       })
       .catch((error) => {
-        console.log(error);
+        alert(error.response.data.message);
       });
     setShowModal(false);
   };

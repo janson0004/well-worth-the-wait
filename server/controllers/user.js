@@ -123,31 +123,32 @@ exports.all_user_info = (req, res, next) => {
 
 // API for updating user
 exports.user_update = (req, res, next) => {
-  User.findById(req.body.userId)
-    .then((user) => {
-      if (req.body.username != null) {
-        user.username = req.body.username;
-      }
-      if (req.body.password != null) {
-        bcrypt.hash(req.body.password, 10, (err, hash) => {
-          if (err) {
-            return res.status(500).json({
-              error: err,
-              message: "Hashing failed",
-            });
-          } else {
-            user.password = hash
-          }
+  User.findById(req.body.userId).then((user) => {
+    if (req.body.username !== "") {
+      user.username = req.body.username;
+    }
+    if (req.body.password !== "") {
+      bcrypt.hash(req.body.password, 10, (err, hash) => {
+        if (err) {
+          return res.status(500).json({
+            error: err,
+            message: "Hashing failed",
+          });
+        } else {
+          user.password = hash;
+        }
 
-          user.save().then(() => {
+        user
+          .save()
+          .then(() => {
             res.status(200).end("User updated");
           })
           .catch((err) => {
             res.status(500).end(err);
           });
-        })
-      }
-    })
+      });
+    }
+  });
 };
 
 exports.user_delete = (req, res, next) => {

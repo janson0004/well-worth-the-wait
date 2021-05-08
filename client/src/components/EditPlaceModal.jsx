@@ -19,7 +19,7 @@ const EditPlaceModal = ({ showModal, setShowModal, selectedPlace }) => {
     setAddressInput(selectedPlace.address);
     setRatingInput(selectedPlace.rating);
     setLatInput(selectedPlace.latitude);
-    setLngInput(selectedPlace.latitude);
+    setLngInput(selectedPlace.longitude);
   }, [selectedPlace]);
 
   const saveEditHandler = () => {

@@ -16,7 +16,7 @@ const EditUserModal = ({
 
   useEffect(() => {
     setUsernameInput(selectedUser.username);
-    setPasswordInput(selectedUser.password);
+    setPasswordInput("");
   }, [selectedUser]);
 
   const saveEditHandler = () => {
@@ -24,7 +24,7 @@ const EditUserModal = ({
       username: usernameInput,
       password: passwordInput,
     };
-    AdminService.editUser(selectedUser._id, {
+    AdminService.editUser({
       ...data,
       userId: selectedUser._id,
     })

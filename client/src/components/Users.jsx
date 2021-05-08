@@ -9,14 +9,15 @@ const Users = ({
   userInfo,
   setUserInfo,
 }) => {
-  const onClickDelete = (userId) => {
-    AdminService.deletePlace(userId)
+  const onClickDelete = () => {
+    AdminService.deleteUser(user._id)
       .then((res) => {
-        setUserInfo(userInfo.filter((user) => user._id !== userId));
+        setUserInfo(userInfo.filter((item) => item._id !== user._id));
+        console.log(res.data);
         alert("Deleted successfully");
       })
       .catch((error) => {
-        console.log(error.response.data.message);
+        console.log(error);
       });
   };
 
@@ -30,9 +31,7 @@ const Users = ({
       <Name>{user.username}</Name>
       <FlexDiv>
         <Button onClick={editHandler}>Edit</Button>
-        <DeleteButton onClick={() => onClickDelete(user._id)}>
-          Delete
-        </DeleteButton>
+        <DeleteButton onClick={onClickDelete}>Delete</DeleteButton>
       </FlexDiv>
     </Wrapper>
   );

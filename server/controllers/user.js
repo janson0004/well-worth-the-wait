@@ -128,11 +128,23 @@ exports.all_user_info = (req, res, next) => {
 // API for updating user
 exports.user_update = (req, res, next) => {
   User.findById(req.body.userId).then((user) => {
-    bcrypt.hash(req.body.password, 10, (err, hash) => {
-      if (err) {
-        return res.status(500).json({
-          error: err,
-          message: "Hashing failed",
+    if (req.body.username != "") {
+      if (req.body.username.length <= 20 && req.body.username.length >= 4) {
+        user.username = req.body.username;
+      } else return res.status(400).end("Username's length invalid");
+    }
+
+    if (req.body.password != "") {
+      if (req.body.password.length <= 20 && req.body.password.length >= 4) {
+        bcrypt.hash(req.body.password, 10, (err, hash) => {
+          if (err) {
+            return res.status(500).json({
+              error: err,
+              message: "Hashing failed",
+            });
+          } else {
+            user.password = hash;
+          }
         });
       } else {
         if (req.body.password != "") {
@@ -159,8 +171,9 @@ exports.user_update = (req, res, next) => {
 };
 
 exports.user_delete = (req, res, next) => {
-  User.findByIdAndDelete(req.body.userId)
+  User.findByIdAndDelete(req.params["userId"])
     .then(() => {
+      console.log(req.params["userId"]);
       res.status(200).end("User deleted");
     })
     .catch((err) => {

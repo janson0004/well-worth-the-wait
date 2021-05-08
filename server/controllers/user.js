@@ -125,36 +125,36 @@ exports.all_user_info = (req, res, next) => {
 };
 
 // API for updating user
+// API for updating user
 exports.user_update = (req, res, next) => {
   User.findById(req.body.userId).then((user) => {
-    if (req.body.username != null) {
-      if (req.body.username.length <= 20 && req.body.username.length >= 4) {
-        user.username = req.body.username;
-      } else return res.status(400).end("Username's length invalid");
-    }
-
-    if (req.body.password != null) {
-      if (req.body.password.length <= 20 && req.body.password.length >= 4) {
-        bcrypt.hash(req.body.password, 10, (err, hash) => {
-          if (err) {
-            return res.status(500).json({
-              error: err,
-              message: "Hashing failed",
-            });
-          } else {
-            user.password = hash;
-          }
+    bcrypt.hash(req.body.password, 10, (err, hash) => {
+      if (err) {
+        return res.status(500).json({
+          error: err,
+          message: "Hashing failed",
         });
-      } else return res.status(400).end("Password's length invalid");
-    }
-    user
-      .save()
-      .then(() => {
-        res.status(200).end("User updated");
-      })
-      .catch((err) => {
-        res.status(500).end(err);
-      });
+      } else {
+        if (req.body.password != "") {
+          if (req.body.password.length <= 20 && req.body.password.length >= 4) {
+            user.password = hash;
+          } else return res.status(400).end("Password's length invalid");
+        }
+        if (req.body.username != "") {
+          if (req.body.username.length <= 20 && req.body.username.length >= 4) {
+            user.username = req.body.username;
+          } else return res.status(400).end("Username's length invalid");
+        }
+        user
+          .save()
+          .then(() => {
+            res.status(200).end("User updated");
+          })
+          .catch((err) => {
+            res.status(500).end(err);
+          });
+      }
+    });
   });
 };
 
